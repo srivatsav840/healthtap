@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AIDoctor</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #6a11cb, black);
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+        h1 {
+            margin-bottom: 20px;
+            font-size: 2.5em;
+            color: #fff;
+        }
+        a {
+            color: #ff6b6b;
+            text-decoration: none;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        form {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        label {
+            display: block;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+        input[type="text"] {
+            width: 100%;
+            max-width: 500px;
+            padding: 15px;
+            border: 2px solid #ff6b6b;
+            border-radius: 5px;
+            font-size: 1.2em;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: background 0.3s, border-color 0.3s;
+            margin-bottom: 20px; /* Increased distance */
+        }
+        input[type="text"]::placeholder {
+            color: #ddd;
+        }
+        input[type="text"]:focus {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: #ff4757;
+            outline: none;
+        }
+        button.submit {
+            padding: 12px 25px;
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            align-self: center; /* Center button */
+        }
+        button.submit:hover {
+            background-color: #ff4757;
+        }
+        .response {
+            margin-top: 20px;
+            color: #fff;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>AI-Doctor</h1>
+
+    <form method="POST" action="/aidoctor">
+<!--        <label for="inputai">AI-DOCTOR:</label>-->
+        <input type="text" name="inputai" id="inputai" placeholder="HOW CAN I HELP YOU" required>
+        <button class="submit" type="submit">Submit</button>
+    </form>
+
+
+    <p class="response">{{full_response}}</p>
+    <p class="response">{{res}}</p>
+
+
+
+
+</body>
+</html>

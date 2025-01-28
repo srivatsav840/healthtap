@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medilearn</title>
+    <link rel="stylesheet" href="stylesheet1.css">
+    <link rel="stylesheet" href="backgroundani.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to right, #6a11cb, #000);
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            overflow-x: hidden;
+
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        h1 {
+            font-size: 4em;
+            color: #fff;
+            background: linear-gradient(45deg, #ff6b6b, #ff4757);
+            -webkit-background-clip: text;
+            color: transparent;
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+            animation: moveText 15s linear infinite;
+        }
+        @keyframes moveText {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        .div1, .div2, .div3 {
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+            border-radius: 15px;
+            padding: 30px;
+            width: 80%;
+            max-width: 700px;
+            margin: 20px;
+            backdrop-filter: blur(10px);
+        }
+        .p0, .aip0 {
+            font-size: 1.8em;
+            color: #ff6b6b;
+            font-weight: 600;
+        }
+        .p1, .aip1 {
+            font-size: 1.1em;
+            color: #eee;
+            line-height: 1.6;
+        }
+        .div3 p {
+            font-size: 1.5em;
+            color: #fff;
+        }
+        a {
+            color: #ff6b6b;
+            text-decoration: none;
+            font-size: 1.2em;
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s;
+        }
+        a:hover {
+            color: #fff;
+            background: #ff6b6b;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+        }
+      .area {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    background: linear-gradient(to left bottom, #8f94fb, #4e54c8);
+    overflow: hidden;
+}
+
+.circles {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.circles li {
+    position: absolute;
+    display: block;
+    list-style: none;
+    background: rgba(255, 255, 255, 0.3);
+    animation: animate 25s linear infinite;
+    bottom: -200px; /* Start below the viewport */
+}
+
+.circles li:nth-child(1) {
+    left: 25%;
+    width: 80px;
+    height: 80px;
+    animation-delay: 0s;
+}
+
+.circles li:nth-child(2) {
+    left: 10%;
+    width: 20px;
+    height: 20px;
+    animation-delay: 2s;
+    animation-duration: 12s;
+}
+
+.circles li:nth-child(3) {
+    left: 70%;
+    width: 20px;
+    height: 20px;
+    animation-delay: 4s;
+}
+
+.circles li:nth-child(4) {
+    left: 40%;
+    width: 60px;
+    height: 60px;
+    animation-delay: 0s;
+    animation-duration: 18s;
+}
+
+.circles li:nth-child(5) {
+    left: 65%;
+    width: 20px;
+    height: 20px;
+    animation-delay: 0s;
+}
+
+.circles li:nth-child(6) {
+    left: 65%;
+    width: 20px;
+    height: 20px;
+    animation-delay: 0s;
+}
+
+.circles li:nth-child(7) {
+    left: 35%;
+    width: 150px;
+    height: 150px;
+    animation-delay: 7s;
+}
+
+.circles li:nth-child(8) {
+    left: 50%;
+    width: 25px;
+    height: 25px;
+    animation-delay: 15s;
+    animation-duration: 45s;
+}
+
+.circles li:nth-child(9) {
+    left: 20%;
+    width: 15px;
+    height: 15px;
+    animation-delay: 2s;
+    animation-duration: 35s;
+}
+
+.circles li:nth-child(10) {
+    left: 85%;
+    width: 150px;
+    height: 150px;
+    animation-delay: 0s;
+    animation-duration: 11s;
+}
+
+@keyframes animate {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+        border-radius: 0;
+    }
+    100% {
+        transform: translateY(-1000px) rotate(720deg);
+        opacity: 0;
+        border-radius: 50%;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <div class="background">
+        <h1>MEDI LEARN</h1>
+        <div class="div1">
+            <p class="p0">Description:</p>
+            <p class="p1">Welcome to Medilearn, your go-to destination for reliable and accessible information about medicines.<br><br>Designed with the common people in mind, this website is a comprehensive resource that aims to empower individuals with knowledge about various medications, their uses, side effects, and general health-related queries.<br><br>Whether you're a healthcare professional or someone with minimal medical knowledge, Medilearn caters to users of all backgrounds.</p>
+        </div>
+        <div class="div2">
+            <p class="aip0">AI Chatbot Assistance:</p>
+            <p class="aip1">Experience the future of healthcare interaction with our AI chatbot.<br><br>This intelligent virtual assistant engages in natural language conversations, understanding your queries and offering personalized responses.<br><br>Seamlessly interact with the chatbot to obtain relevant information about medicines, treatment alternatives, and more.</p>
+        </div>
+        <div class="div3">
+            <p>Find medicine for your disease</p>
+            <a href="/medico">Search for Medicine</a>
+<!--        </div>-->
+<!--        <div class="area">-->
+<!--            <ul class="circles">-->
+<!--                <li></li>-->
+<!--                <li></li>-->
+<!--                <li></li>-->
+<!--                <li></li>-->
+<!--                <li></li>-->
+<!--                <li></li>-->
+<!--                <li></li>-->
+<!--                <li></li>-->
+<!--                <li></li>-->
+<!--                <li></li>-->
+<!--            </ul>-->
+<!--        </div>-->
+    </div>
+</body>
+</html>

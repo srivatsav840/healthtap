@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medicine Details</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #6a11cb, black);
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+        h1 {
+            margin-bottom: 20px;
+            font-size: 2.5em;
+            color: #fff;
+        }
+        form {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        label {
+            display: block;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+        input[type="text"] {
+            width: calc(100% - 22px);
+            max-width: 500px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 2px solid #ff6b6b;
+            border-radius: 5px;
+            font-size: 1.2em;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: background 0.3s, border-color 0.3s;
+        }
+        input[type="text"]::placeholder {
+            color: #ddd;
+        }
+        input[type="text"]:focus {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: #ff4757;
+            outline: none;
+        }
+        button {
+            padding: 12px 25px;
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            align-self: center;
+        }
+        button:hover {
+            background-color: orange;
+        }
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            color: #ff6b6b;
+            text-decoration: none;
+            font-size: 1.2em;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        h2 {
+            margin-top: 30px;
+            font-size: 2em;
+            color: #fff;
+        }
+        .cards {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            margin: 10px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 900px;
+            text-align: left;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+        .card img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .card p {
+            margin: 5px 0;
+            color: #fff;
+        }
+        .card h3 {
+            margin-top: 0;
+            color: #ff6b6b;
+        }
+        .error {
+            margin-top: 20px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Search Diseases</h1>
+
+    <form method="POST" action="{{ url_for('meddes') }}">
+        <label for="disease_select">Select Disease:</label>
+        <input type="text" name="disease_select" id="disease_select" list="disease_list" autocomplete="off" placeholder="Choose disease" required>
+        <datalist id="disease_list"></datalist>
+        <button type="submit">Search</button>
+    </form>
+    <a href="/aidoctor">Meet AI Doctor</a>
+
+    {% if results %}
+        <h2>Recommendations:</h2>
+        <div class="cards">
+            {% for result in results %}
+                <div class="card">
+                    <h3>{{ result.medicine_name }}</h3>
+                    <p><strong>Composition:</strong> {{ result.composition }}</p>
+                    <p><strong>Uses:</strong> {{ result.uses }}</p>
+                    <p><strong>Side Effects:</strong> {{ result.side_effects }}</p>
+                    <p><strong>Manufacturer:</strong> {{ result.manufacturer }}</p>
+                    <p><strong>Excellent Review %:</strong> {{ result.excellent_review }}</p>
+                    <p><strong>Average Review %:</strong> {{ result.average_review }}</p>
+                    <p><strong>Poor Review %:</strong> {{ result.poor_review }}</p>
+                    {% if result.image_url %}
+                        <p><strong>Image:</strong> <a href="{{ result.image_url }}" target="_blank">{{ result.image_url }}</a></p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    <hr>
+    {% elif error %}
+        <p class="error">{{ error }}</p>
+    {% endif %}
+
+    <script>
+        const diseaseInput = document.getElementById('disease_select');
+        const diseaseList = document.getElementById('disease_list');
+
+        diseaseInput.addEventListener('input', function () {
+            const query = diseaseInput.value.trim();
+
+            if (query.length > 0) {
+                fetch(`/autocomplete?query=${query}`)
+                    .then(response => response.json())
+                    .then(matches => {
+                        diseaseList.innerHTML = '';
+                        matches.forEach(match => {
+                            const option = document.createElement('option');
+                            option.value = match;
+                            diseaseList.appendChild(option);
+                        });
+                    })
+                    .catch(error => console.error('Error fetching autocomplete data:', error));
+            } else {
+                diseaseList.innerHTML = '';
+            }
+        });
+    </script>
+
+</body>
+</html>

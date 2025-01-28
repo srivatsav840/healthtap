@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctors Availability</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        h3, p {
+            margin: 0;
+            padding: 5px 0;
+        }
+
+        /* Form Styles */
+        form {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px;
+        }
+
+        form a,
+        form input[type="submit"] {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        form a:hover,
+        form input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        /* Doctor Cards */
+        .result {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .doctor-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+            width: 300px;
+            padding: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .doctor-card:hover {
+            transform: translateY(-10px);
+        }
+
+        /* Schedule Table */
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .schedule-table th,
+        .schedule-table td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        /* Button Styles */
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+
+        .update-btn,
+        .remove-btn {
+            background-color: #28a745;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .remove-btn {
+            background-color: #dc3545;
+        }
+
+        .update-btn:hover {
+            background-color: #218838;
+        }
+
+        .remove-btn:hover {
+            background-color: #c82333;
+        }
+
+        /* No Result Message */
+        .no-result {
+            color: white;
+            text-align: center;
+            font-size: 18px;
+            padding: 20px;
+        }
+        .ctrl{
+        text-align:center;
+        color:white;
+        }
+    </style>
+    <script>
+        function confirmRemoval() {
+            return confirm('Are you sure you want to remove this doctor?');
+        }
+    </script>
+</head>
+<body>
+    <form action="/show_doctors" method="POST">
+        <input type="submit" id="show_doctors" name="action" value="Show Doctors">
+        <a href="/adminpage">New Entry</a>
+    </form>
+    <p class="ctrl">Use CTRL+F to search doctors</p>
+    {{dat}}
+
+    {% if data %}
+        <div class="result">
+            {% if data == "No doctor appointed for your necessity" %}
+                <p class="no-result">{{ data }}</p>
+            {% else %}
+                {% for doctor in data %}
+                    <div class="doctor-card">
+                        <h3>Doctor Name: {{ doctor[0] }}</h3>
+                        <p><strong>Doctor ID:</strong> {{ doctor[1] }}</p>
+                        <p><strong>Specialization:</strong> {{ doctor[2] }}</p>
+
+                        <p>Available Timings:</p>
+                        <table class="schedule-table">
+                            <tr>
+                                <th>Day</th>
+                                <th>Timing</th>
+                            </tr>
+                            <tr>
+                                <td>Monday</td>
+                                <td>{{ doctor[3] }}</td>
+                            </tr>
+                            <tr>
+                                <td>Tuesday</td>
+                                <td>{{ doctor[4] }}</td>
+                            </tr>
+                            <tr>
+                                <td>Wednesday</td>
+                                <td>{{ doctor[5] }}</td>
+                            </tr>
+                            <tr>
+                                <td>Thursday</td>
+                                <td>{{ doctor[6] }}</td>
+                            </tr>
+                            <tr>
+                                <td>Friday</td>
+                                <td>{{ doctor[7] }}</td>
+                            </tr>
+                            <tr>
+                                <td>Saturday</td>
+                                <td>{{ doctor[8] }}</td>
+                            </tr>
+                            <tr>
+                                <td>Sunday</td>
+                                <td>{{ doctor[9] }}</td>
+                            </tr>
+                        </table>
+                        <div class="button-container">
+                            <form action="/edit_doctor" method="GET">
+                                <input type="hidden" name="doctor_id" value="{{ doctor[1] }}">
+                                <button type="submit" class="update-btn">Update</button>
+                            </form>
+                            <form action="/remove_doctor" method="POST" onsubmit="return confirmRemoval();">
+                                <input type="hidden" name="doctor_id" value="{{ doctor[1] }}">
+                                <button type="submit" class="remove-btn">Remove</button>
+                            </form>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    {% endif %}
+</body>
+</html>

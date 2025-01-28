@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Book an Appointment</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, #6a11cb, black); /* Matching background color */
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 3em;
+            color: #007bff;
+        }
+
+        .appointment-form {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95); /* Consistent background */
+            padding: 20px;
+            border-radius: 20px; /* Rounded corners */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Consistent shadow */
+        }
+
+        .appointment-form label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+            color: #007bff; /* Matching label color */
+        }
+
+        .appointment-form input[type="text"],
+        .appointment-form input[type="number"],
+        .appointment-form input[type="tel"],
+        .appointment-form input[type="datetime-local"],
+        .appointment-form select {
+            width: calc(100% - 22px);
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 25px; /* Rounded input fields */
+            color: #333;
+            background: #f0f0f0; /* Matching input background */
+            transition: background-color 0.3s ease, border 0.3s ease;
+        }
+
+        .appointment-form input[type="text"]:focus,
+        .appointment-form input[type="number"]:focus,
+        .appointment-form input[type="tel"]:focus,
+        .appointment-form input[type="datetime-local"]:focus,
+        .appointment-form select:focus {
+            background-color: #e6e6e6;
+            border: 1px solid #007bff; /* Consistent focus border color */
+        }
+
+        .appointment-form input[type="submit"] {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 25px; /* Rounded button */
+            background-color: #007bff; /* Matching button color */
+            color: white;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .appointment-form input[type="submit"]:hover {
+            background-color: #0056b3; /* Hover effect */
+        }
+
+        .back-button {
+            display: block;
+            text-align: center;
+            margin: 20px 0;
+            color: #007bff;
+            text-decoration: none;
+            font-size: 1.2em;
+        }
+
+        .back-button:hover {
+            text-decoration: underline;
+        }
+
+        .flash-message {
+            width: 80%;
+            margin: 20px auto;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 1em;
+            color: white;
+        }
+
+        .flash-success {
+            background-color: #4CAF50;
+        }
+
+        .flash-error {
+            background-color: #f44336;
+        }
+
+        .header, .benefits {
+            text-align: center;
+            margin: 20px;
+        }
+
+        .header img {
+            width: 100%;
+            height: auto;
+            border-radius: 20px; /* Rounded corners for image */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Image shadow for consistency */
+            margin-bottom: 20px;
+        }
+
+        .benefits {
+            background: rgba(255, 255, 255, 0.95); /* Consistent background */
+            padding: 20px;
+            border-radius: 20px; /* Rounded corners */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Consistent shadow */
+        }
+        h2{
+        color:white;
+        }
+        h4 {
+        text-align:center;
+            color: white;
+        }
+
+        p {
+            font-size: 1.1em;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Book Your Appointments Here</h1>
+        <h2>Scroll to book an appointment</h2>
+        <img src="https://i0.wp.com/webenglish.se/wp-content/uploads/2019/08/health.jpg?fit=1200%2C1088&ssl=1" alt="Hospital Image">
+    </div>
+        <h4> Note: check doctor availability before booking appointment</h4>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash-message flash-{{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div class="appointment-form">
+        <form action="/bookappointment" method="POST">
+            <label for="name">Patient Name</label>
+            <input type="text" id="name" name="name" placeholder="Name" required>
+
+            <label for="age">Age</label>
+            <input type="number" id="age" name="age" placeholder="Age" required>
+
+            <label for="gender">Gender</label>
+            <select id="gender" name="gender" required>
+                <option value="" disabled selected>Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Prefer not to say">Prefer not to say</option>
+            </select>
+
+            <label for="mobile">Contact</label>
+            <input type="tel" id="mobile" name="mobile" placeholder="Mobile" pattern="[0-9]{10}" required>
+
+            <label for="doctor">Doctor You Want To Meet</label>
+            <select id="doctor" name="doctor" required>
+                <option value="" disabled selected>Select a department</option>
+                <option value="Neuro">Neuro</option>
+                <option value="ENT">ENT</option>
+                <option value="Cardio">Cardio</option>
+                <option value="Psychology">Psychology</option>
+                <!-- Add more departments as needed -->
+            </select>
+
+            <label for="datetime">Date of Appointment</label>
+            <input type="datetime-local" id="datetime" name="datetime" placeholder="Time of appointment" required>
+
+            <input type="submit" name="action" value="Book Appointment">
+        </form>
+    </div>
+
+    <a href="/userhome" class="back-button">Back</a>
+
+    <div class="benefits">
+        <h2>Benefits </h2>
+        <p> increased flexibility and ease of use. Book appointments at your convenience, manage your schedules effortlessly, and get timely reminders. Stay organized and make the most of your time with our user-friendly interface and advanced features.</p>
+    </div>
+
+    <script>
+        // Add some dynamic JavaScript functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Example: Adding an alert when the form is successfully submitted
+            const form = document.querySelector('.appointment-form form');
+            form.addEventListener('submit', function() {
+                alert('Your appointment has been booked successfully! Copy ID');
+            });
+        });
+    </script>
+
+</body>
+</html>
