@@ -15,21 +15,37 @@ mydb = psycopg2.connect(
 mycursor = mydb.cursor()
 app.secret_key = 'sri@vatsav*40'
 
-
 def create_table():
     try:
-        mycursor.execute("CREATE TABLE IF NOT EXISTS userlogin (userid VARCHAR(20), password VARCHAR(20))")
-    except mysql.connector.Error as err:
-        return f"Failed to create table: {err}"
+        mycursor.execute("""
+            CREATE TABLE IF NOT EXISTS userlogin (
+                userid VARCHAR(50) PRIMARY KEY,
+                password VARCHAR(100)
+            )
+        """)
+        mydb.commit()
+    except psycopg2.Error as err:
+        print(f"Failed to create table: {err}")
 
 
 def create_table2():
     try:
-        mycursor.execute(
-            "CREATE TABLE IF NOT EXISTS appointment (id VARCHAR(20) PRIMARY KEY, name VARCHAR(20), age VARCHAR(5), gender VARCHAR(20), mobile VARCHAR(15), doctor VARCHAR(20), datetime VARCHAR(20), username VARCHAR(20))"
-        )
-    except mysql.connector.Error as err:
-        return f"Failed to create table: {err}"
+        mycursor.execute("""
+            CREATE TABLE IF NOT EXISTS appointment (
+                id VARCHAR(50) PRIMARY KEY,
+                name VARCHAR(100),
+                age VARCHAR(10),
+                gender VARCHAR(20),
+                mobile VARCHAR(20),
+                doctor VARCHAR(100),
+                datetime VARCHAR(50),
+                username VARCHAR(50)
+            )
+        """)
+        mydb.commit()
+    except psycopg2.Error as err:
+        print(f"Failed to create table: {err}")
+
 
 
 csv_file = "https://raw.githubusercontent.com/srivatsav840/healthtap/refs/heads/main/Medicine_Details.csv"
@@ -39,11 +55,24 @@ symptoms_data = df['Uses'].unique()
 
 def create_table3():
     try:
-        mycursor.execute(
-            "CREATE TABLE IF NOT EXISTS doctoravail (doctor_name varchar(20),doctor_id varchar(20),doctor_specialization varchar(20) ,monday varchar(20),tuesday varchar(20),wednesday varchar(20),thursday varchar(20),friday varchar(20),saturday varchar(20),sunday varchar(20) )"
-        )
-    except mysql.connector.Error as err:
-        return f"Failed to create table: {err}"
+        mycursor.execute("""
+            CREATE TABLE IF NOT EXISTS doctoravail (
+                doctor_name VARCHAR(50),
+                doctor_id VARCHAR(50),
+                doctor_specialization VARCHAR(100),
+                monday VARCHAR(20),
+                tuesday VARCHAR(20),
+                wednesday VARCHAR(20),
+                thursday VARCHAR(20),
+                friday VARCHAR(20),
+                saturday VARCHAR(20),
+                sunday VARCHAR(20)
+            )
+        """)
+        mydb.commit()
+    except psycopg2.Error as err:
+        print(f"Failed to create table: {err}")
+
 
 
 @app.route('/')
@@ -77,41 +106,53 @@ def userhome():
 
 
 @app.route('/signin_submit', methods=['POST', 'GET'])
+@app.route('/signin_submit', methods=['POST', 'GET'])
 def signin_submit():
-    if request.method == "POST":
-        username = request.form['username']
-        password = request.form['password']
-        session['username'] = username
-        create_table()
-        mycursor.execute("SELECT * FROM userlogin WHERE userid = %s AND password = %s", (username, password))
-        row = mycursor.fetchone()
-        if row is None:
-            re = "username or password did not match please try again!!"
-            return render_template('signin.html', re=re)
-        else:
-            return redirect(url_for('userhome'))
+    try:
+        if request.method == "POST":
+            username = request.form['username']
+            password = request.form['password']
+            session['username'] = username
+            create_table()
+            mycursor.execute("SELECT * FROM userlogin WHERE userid = %s AND password = %s", (username, password))
+            row = mycursor.fetchone()
+            if row is None:
+                re = "Username or password did not match. Please try again!"
+                return render_template('signin.html', re=re)
+            else:
+                return redirect(url_for('userhome'))
+        return render_template('signin.html')
+    except psycopg2.Error as err:
+        return f"Database error during signin: {err}"
+    except Exception as e:
+        return f"Unexpected error during signin: {e}"
+
 
 
 @app.route('/signup_submit', methods=["POST", "GET"])
 def signup_submit():
-    if request.method == "POST":
-        user = request.form['username']
-        pswd = request.form['password']
-        create_table()
-        mycursor.execute("SELECT userid FROM userlogin WHERE userid = %s", (user,))
-        row = mycursor.fetchall()
-        if not row:
-            sql = "INSERT INTO userlogin (userid, password) VALUES (%s, %s)"
-            values = (user, pswd)
-            mycursor.execute(sql, values)
-            mydb.commit()
-            re = "Account successfully created. You can login now."
-            return render_template('signup.html', re=re)
-        else:
-            ss = "Username already exists. Use a different username."
-            return render_template('signup.html', ss=ss)
-
-    return render_template('signup.html')
+    try:
+        if request.method == "POST":
+            user = request.form['username']
+            pswd = request.form['password']
+            create_table()
+            mycursor.execute("SELECT userid FROM userlogin WHERE userid = %s", (user,))
+            row = mycursor.fetchall()
+            if not row:
+                sql = "INSERT INTO userlogin (userid, password) VALUES (%s, %s)"
+                values = (user, pswd)
+                mycursor.execute(sql, values)
+                mydb.commit()
+                re = "Account successfully created. You can login now."
+                return render_template('signup.html', re=re)
+            else:
+                ss = "Username already exists. Use a different username."
+                return render_template('signup.html', ss=ss)
+        return render_template('signup.html')
+    except psycopg2.Error as err:
+        return f"Database error during signup: {err}"
+    except Exception as e:
+        return f"Unexpected error during signup: {e}"
 
 
 @app.route('/gosignin', methods=["POST", "GET"])
@@ -219,31 +260,40 @@ def aidoc():
 
 @app.route('/bookappointment', methods=["POST", "GET"])
 def bookappointment():
-    if request.method == "POST":
-        name = request.form['name']
-        age = request.form['age']
-        gender = request.form['gender']
-        mobile = request.form['mobile']
-        datetime = request.form['datetime']
-        doctor = request.form['doctor']
-        username = session.get('username', None)
-        create_table2()
-        mycursor.execute("SELECT datetime FROM appointment WHERE datetime = %s", (datetime,))
-        row = mycursor.fetchone()
-        if row:
-            flash("No slot is available at the selected time. Please choose a different time.", "error")
-            return redirect(url_for('bookappointment'))
-        else:
-            id = ''.join(random.choices('0123456789', k=10))
-            sql = "INSERT INTO appointment (id, name, age, gender, mobile, doctor, datetime, username) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
-            values = (id, name, age, gender, mobile, doctor, datetime, username)
-            mycursor.execute(sql, values)
-            mydb.commit()
-            flash(f"Your appointment has been successfully booked. Your ID is {id}. Be there before time.", "success")
-            return redirect(url_for('bookappointment'))
+    try:
+        if request.method == "POST":
+            name = request.form['name']
+            age = request.form['age']
+            gender = request.form['gender']
+            mobile = request.form['mobile']
+            datetime_val = request.form['datetime']
+            doctor = request.form['doctor']
+            username = session.get('username', None)
 
-    return render_template('appointment.html')
+            create_table2()
 
+            mycursor.execute("SELECT datetime FROM appointment WHERE datetime = %s", (datetime_val,))
+            row = mycursor.fetchone()
+            if row:
+                flash("No slot is available at the selected time. Please choose a different time.", "error")
+                return redirect(url_for('bookappointment'))
+            else:
+                id = ''.join(random.choices('0123456789', k=10))
+                sql = """
+                    INSERT INTO appointment (id, name, age, gender, mobile, doctor, datetime, username)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                """
+                values = (id, name, age, gender, mobile, doctor, datetime_val, username)
+                mycursor.execute(sql, values)
+                mydb.commit()
+                flash(f"Your appointment has been successfully booked. Your ID is {id}. Be there before time.", "success")
+                return redirect(url_for('bookappointment'))
+
+        return render_template('appointment.html')
+    except psycopg2.Error as err:
+        return f"Database error while booking appointment: {err}"
+    except Exception as e:
+        return f"Unexpected error while booking appointment: {e}"
 
 @app.route('/cancel')
 def cancel():
@@ -252,96 +302,144 @@ def cancel():
         if username:
             search_query = request.args.get('search', '').lower()
             if search_query:
-                query = "SELECT id, name, age, datetime, doctor ,mobile FROM appointment WHERE username = %s AND LOWER(name) LIKE %s"
+                query = """
+                    SELECT id, name, age, datetime, doctor, mobile 
+                    FROM appointment 
+                    WHERE username = %s AND LOWER(name) LIKE %s
+                """
                 mycursor.execute(query, (username, f"%{search_query}%"))
             else:
-                query = "SELECT id, name, age, datetime, doctor,mobile  FROM appointment WHERE username = %s"
+                query = """
+                    SELECT id, name, age, datetime, doctor, mobile 
+                    FROM appointment 
+                    WHERE username = %s
+                """
                 mycursor.execute(query, (username,))
             data = mycursor.fetchall()
             return render_template('cancel.html', data=data)
         else:
             return render_template('cancel.html', ss="No username in session.")
+    except psycopg2.Error as err:
+        return render_template('cancel.html', ss=f"Database error while fetching: {err}")
     except Exception as e:
-        return render_template('cancel.html', ss="Error while fetching: " + str(e))
+        return render_template('cancel.html', ss=f"Unexpected error while fetching: {e}")
+
 
 
 @app.route('/edit', methods=['GET', 'POST'])
 def edit():
-    if request.method == "POST":
-        oldname = request.form['name']
-        oldage = request.form['age']
-        oldgender = request.form['gender']
-        oldcontact = request.form['mobile']
-        olddoctor = request.form['doctor']
-        olddate = request.form['datetime']
-        username = session.get('username', None)
-        appointment_id = request.args.get('id')
+    try:
+        if request.method == "POST":
+            oldname = request.form['name']
+            oldage = request.form['age']
+            oldgender = request.form['gender']
+            oldcontact = request.form['mobile']
+            olddoctor = request.form['doctor']
+            olddate = request.form['datetime']
+            username = session.get('username', None)
+            appointment_id = request.args.get('id')
 
-        mycursor.execute(
-            "UPDATE appointment SET name=%s, age=%s, gender=%s, mobile=%s, doctor=%s, datetime=%s WHERE id=%s AND username=%s",
-            (oldname, oldage, oldgender, oldcontact, olddoctor, olddate, appointment_id, username)
-        )
-        mydb.commit()
-        flash("Appointment successfully updated!", "success")
-        return redirect(url_for('cancel'))
-    else:
-        appointment_id = request.args.get('id')
-        username = session.get('username', None)
-
-        mycursor.execute(
-            "SELECT name, age, gender, mobile, doctor, datetime FROM appointment WHERE id=%s AND username=%s",
-            (appointment_id, username)
-        )
-        appointment = mycursor.fetchone()
-
-        if appointment:
-            oldname, oldage, oldgender, oldcontact, olddoctor, olddate = appointment
-            return render_template('edit.html', oldname=oldname, oldage=oldage, oldgender=oldgender,
-                                   oldcontact=oldcontact, olddoctor=olddoctor, olddate=olddate, id=appointment_id)
-        else:
-            flash("Appointment not found.", "error")
+            mycursor.execute(
+                "UPDATE appointment SET name=%s, age=%s, gender=%s, mobile=%s, doctor=%s, datetime=%s WHERE id=%s AND username=%s",
+                (oldname, oldage, oldgender, oldcontact, olddoctor, olddate, appointment_id, username)
+            )
+            mydb.commit()
+            flash("Appointment successfully updated!", "success")
             return redirect(url_for('cancel'))
+
+        else:
+            appointment_id = request.args.get('id')
+            username = session.get('username', None)
+
+            mycursor.execute(
+                "SELECT name, age, gender, mobile, doctor, datetime FROM appointment WHERE id=%s AND username=%s",
+                (appointment_id, username)
+            )
+            appointment = mycursor.fetchone()
+
+            if appointment:
+                oldname, oldage, oldgender, oldcontact, olddoctor, olddate = appointment
+                return render_template(
+                    'edit.html',
+                    oldname=oldname,
+                    oldage=oldage,
+                    oldgender=oldgender,
+                    oldcontact=oldcontact,
+                    olddoctor=olddoctor,
+                    olddate=olddate,
+                    id=appointment_id
+                )
+            else:
+                flash("Appointment not found.", "error")
+                return redirect(url_for('cancel'))
+
+    except psycopg2.Error as db_err:
+        flash(f"Database error occurred: {db_err}", "error")
+        return redirect(url_for('cancel'))
+
+    except Exception as e:
+        flash(f"Unexpected error occurred: {e}", "error")
+        return redirect(url_for('cancel'))
 
 
 @app.route('/cancelappointment', methods=['POST', 'GET'])
 def cancelappointment():
-    username = session.get('username', None)
+    try:
+        username = session.get('username', None)
 
-    if request.method == "POST":
-        id = request.form.get('task')
+        if request.method == "POST":
+            id = request.form.get('task')
 
-        # Delete the appointment
-        query_delete = "DELETE FROM appointment WHERE id = %s AND username = %s"
-        mycursor.execute(query_delete, (id, username))
-        mydb.commit()
+            # Delete the appointment
+            query_delete = "DELETE FROM appointment WHERE id = %s AND username = %s"
+            mycursor.execute(query_delete, (id, username))
+            mydb.commit()
+            flash("Appointment successfully canceled.", "success")
 
-        flash("Appointment successfully canceled.", "success")
+        # This part handles both GET requests and the refreshed page after cancellation
+        query_select = "SELECT id, name, age, datetime, doctor, mobile FROM appointment WHERE username = %s"
+        mycursor.execute(query_select, (username,))
+        data = mycursor.fetchall()
 
-    # This part handles both GET requests and the refreshed page after cancellation
-    query_select = "SELECT id, name, age, datetime, doctor, mobile FROM appointment WHERE username = %s"
-    mycursor.execute(query_select, (username,))
-    data = mycursor.fetchall()
+        return render_template('cancel.html', data=data)
 
-    return render_template('cancel.html', data=data)
+    except psycopg2.Error as db_err:
+        flash(f"Database error occurred: {db_err}", "error")
+        return render_template('cancel.html', data=[])
+
+    except Exception as e:
+        flash(f"Unexpected error occurred: {e}", "error")
+        return render_template('cancel.html', data=[])
 
 
 
 
 @app.route('/confirmcancel', methods=['POST'])
 def confirmcancel():
-    if request.method == "POST":
-        id = request.form.get('task')
-        username = session.get('username', None)
-        query_delete = "DELETE FROM appointment WHERE id = %s AND username = %s"
-        mycursor.execute(query_delete, (id, username))
-        mydb.commit()
+    try:
+        if request.method == "POST":
+            id = request.form.get('task')
+            username = session.get('username', None)
 
-        flash("Appointment successfully canceled.", "success")
-        return redirect(url_for('cancelappointment'))
+            query_delete = "DELETE FROM appointment WHERE id = %s AND username = %s"
+            mycursor.execute(query_delete, (id, username))
+            mydb.commit()
 
-    else:
-        flash("Invalid request.", "error")
-    return redirect(url_for('cancel'))
+            flash("Appointment successfully canceled.", "success")
+            return redirect(url_for('cancelappointment'))
+
+        else:
+            flash("Invalid request method.", "error")
+            return redirect(url_for('cancel'))
+
+    except psycopg2.Error as db_err:
+        flash(f"Database error occurred: {db_err}", "error")
+        return redirect(url_for('cancel'))
+
+    except Exception as e:
+        flash(f"Unexpected error occurred: {e}", "error")
+        return redirect(url_for('cancel'))
+
 
 
 @app.route('/adminenter', methods=['POST', 'GET'])
@@ -356,9 +454,10 @@ def adminentry():
     return render_template('admin.html')
 
 
-@app.route('/show_doctors', methods=["POST","GET"])
+@app.route('/show_doctors', methods=["POST", "GET"])
 def show_doctors():
     try:
+        # PostgreSQL query syntax is the same here
         mycursor.execute("""
             SELECT doctor_name, doctor_id, doctor_specialization, 
                    monday, tuesday, wednesday, thursday, 
@@ -372,9 +471,12 @@ def show_doctors():
 
         return render_template('doctors_show.html', data=data)
 
-    except Exception as e:
+    except psycopg2.Error as db_err:
+        return render_template('doctors_show.html', dat="Database error: " + str(db_err))
 
-        return render_template('doctors_show.html', dat="An error occurred: " + str(e))
+    except Exception as e:
+        return render_template('doctors_show.html', dat="An unexpected error occurred: " + str(e))
+
 
 
 @app.route('/edit_doctor', methods=['GET', 'POST'])
@@ -393,7 +495,7 @@ def edit_doctor():
         sunday = request.form.get('sunday')
 
         try:
-            # Update the doctor's details in the database
+            # PostgreSQL-compatible update query
             query = """
                 UPDATE doctoravail
                 SET doctor_name = %s, doctor_specialization = %s, 
@@ -401,26 +503,36 @@ def edit_doctor():
                     friday = %s, saturday = %s, sunday = %s
                 WHERE doctor_id = %s
             """
-            values = (doctorname, doctor_specialization, monday, tuesday, wednesday, thursday, friday, saturday, sunday, doctor_id)
+            values = (
+                doctorname, doctor_specialization, monday, tuesday, wednesday, 
+                thursday, friday, saturday, sunday, doctor_id
+            )
             mycursor.execute(query, values)
             mydb.commit()
 
             flash("Doctor details successfully updated!", "success")
-
-            # Redirect back to the doctor list
             return redirect(url_for('show_doctors'))
 
+        except psycopg2.Error as db_err:
+            flash(f"Database error: {db_err.pgerror}", "error")
+            return redirect(url_for('edit_doctor', doctor_id=doctor_id))
+
         except Exception as e:
-            flash(f"An error occurred: {str(e)}", "error")
+            flash(f"An unexpected error occurred: {str(e)}", "error")
             return redirect(url_for('edit_doctor', doctor_id=doctor_id))
 
     else:
-        # Handle the GET request
+        # Handle GET request
         doctor_id = request.args.get('doctor_id')
 
         try:
-            # Fetch the doctor's details using the doctor_id
-            query = "SELECT doctor_name, doctor_id, doctor_specialization, monday, tuesday, wednesday, thursday, friday, saturday, sunday FROM doctoravail WHERE doctor_id = %s"
+            query = """
+                SELECT doctor_name, doctor_id, doctor_specialization, 
+                       monday, tuesday, wednesday, thursday, 
+                       friday, saturday, sunday 
+                FROM doctoravail 
+                WHERE doctor_id = %s
+            """
             mycursor.execute(query, (doctor_id,))
             doctor = mycursor.fetchone()
 
@@ -428,13 +540,15 @@ def edit_doctor():
                 flash("Doctor not found.", "error")
                 return redirect(url_for('show_doctors'))
 
-            # Render the update form with the doctor's current details
             return render_template('edit_doctor.html', doctor=doctor)
 
-        except Exception as e:
-            flash(f"An error occurred: {str(e)}", "error")
+        except psycopg2.Error as db_err:
+            flash(f"Database error: {db_err.pgerror}", "error")
             return redirect(url_for('show_doctors'))
 
+        except Exception as e:
+            flash(f"An unexpected error occurred: {str(e)}", "error")
+            return redirect(url_for('show_doctors'))
 
 @app.route('/remove_doctor', methods=['POST'])
 def remove_doctor():
@@ -447,11 +561,15 @@ def remove_doctor():
         mydb.commit()
 
         flash("Doctor successfully removed!", "success")
-    except Exception as e:
-        flash(f"An error occurred: {str(e)}", "error")
 
-    # Redirect back to the show doctors page
+    except psycopg2.Error as db_err:
+        flash(f"Database error: {db_err.pgerror}", "error")
+
+    except Exception as e:
+        flash(f"An unexpected error occurred: {str(e)}", "error")
+
     return redirect(url_for('show_doctors'))
+
 
 
 @app.route('/adminpage')
@@ -475,16 +593,41 @@ def doctor_details_add():
         sunday = request.form['sunday']
 
         try:
-            create_table3()
-            query = "INSERT INTO doctoravail(doctor_name,doctor_id, doctor_specialization, monday, tuesday, wednesday, thursday, friday, saturday, sunday) VALUES (%s,%s,%s, %s, %s, %s, %s, %s, %s, %s)"
-            values = (doctorname, doctorid, doctor, monday, tuesday, wednesday, thursday, friday, saturday, sunday)
+            create_table3()  # Assumes this creates the `doctoravail` table if not exists
+
+            query = """
+                INSERT INTO doctoravail (
+                    doctor_name, doctor_id, doctor_specialization,
+                    monday, tuesday, wednesday, thursday, 
+                    friday, saturday, sunday
+                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """
+
+            values = (
+                doctorname, doctorid, doctor, monday, tuesday,
+                wednesday, thursday, friday, saturday, sunday
+            )
+
             mycursor.execute(query, values)
             mydb.commit()
-            re = "Data successfully added"
+            re = "Doctor data successfully added."
+
+        except psycopg2.errors.UniqueViolation:
+            mydb.rollback()
+            re = "Doctor ID already exists. Please use a unique ID."
+
+        except psycopg2.Error as db_err:
+            mydb.rollback()
+            re = f"Database error: {db_err.pgerror}"
+
         except Exception as e:
+            mydb.rollback()
             re = f"Something went wrong: {str(e)}"
 
         return render_template('adminpage.html', re=re)
+
+    return render_template('adminpage.html')
+
 
 
 @app.route('/doctor_availability', methods=['POST', 'GET'])
@@ -496,12 +639,24 @@ def doctor_availability():
 def doctoravailability():
     if request.method == "POST":
         doctor_specialization = request.form['doctor']
-        mycursor.execute("SELECT * FROM doctoravail WHERE doctor_specialization=%s", (doctor_specialization,))
-        data = mycursor.fetchall()
-        print("Fetched Data:", data)
-        if not data:
-            data = "No doctor appointed for your necessity"
-        return render_template('doctor_availability.html', data=data)
+
+        try:
+            query = "SELECT * FROM doctoravail WHERE doctor_specialization = %s"
+            mycursor.execute(query, (doctor_specialization,))
+            data = mycursor.fetchall()
+            print("Fetched Data:", data)
+
+            if not data:
+                message = "No doctor appointed for your necessity"
+                return render_template('doctor_availability.html', data=None, message=message)
+
+            return render_template('doctor_availability.html', data=data)
+
+        except Exception as e:
+            print("Database Error:", str(e))
+            message = f"Error fetching doctor availability: {str(e)}"
+            return render_template('doctor_availability.html', data=None, message=message)
+
     return render_template('doctor_availability.html', data=None)
 
 
