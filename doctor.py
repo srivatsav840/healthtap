@@ -1,12 +1,17 @@
 import replicate
 from flask import Flask, render_template, redirect, session, url_for, request, flash, jsonify
-import mysql.connector
+import psycopg2
 import random
 import os
 import pandas as pd
 
 app = Flask(__name__)
-mydb = mysql.connector.connect(host='localhost', user='root', passwd='sri@vatsav840', database='sri')
+mydb = psycopg2.connect(
+    host='dpg-d23i2j15pdvs739vngog-a',
+    user='sri_xavk_user',
+    password='XUK27FvluX87Uyc61e7XTg9vssScXCdK',
+    database='sri_xavk'
+)
 mycursor = mydb.cursor()
 app.secret_key = 'sri@vatsav*40'
 
