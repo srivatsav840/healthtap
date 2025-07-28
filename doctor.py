@@ -32,7 +32,7 @@ def create_table2():
         return f"Failed to create table: {err}"
 
 
-csv_file = "C:\\Users\\sriva\\OneDrive\\Desktop\\medilearn\\Medicine_Details.csv"
+csv_file = "Medicine_Details - Copy.csv"
 df = pd.read_csv(csv_file)
 symptoms_data = df['Uses'].unique()
 
