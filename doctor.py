@@ -32,7 +32,7 @@ def create_table2():
         return f"Failed to create table: {err}"
 
 
-csv_file = "Medicine_Details - Copy.csv"
+csv_file = "Medicine_Details_Copy.csv"
 df = pd.read_csv(csv_file)
 symptoms_data = df['Uses'].unique()
 
