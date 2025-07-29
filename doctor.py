@@ -16,8 +16,17 @@ mydb = psycopg2.connect(
 mycursor = mydb.cursor()
 app.secret_key = 'sri@vatsav*40'
 
+
 def create_table():
     try:
+        mydb = psycopg2.connect(
+            host=os.getenv("DB_HOST"),
+            port=os.getenv("DB_PORT"),
+            database=os.getenv("DB_NAME"),
+            user=os.getenv("DB_USER"),
+            password=os.getenv("DB_PASSWORD")
+        )
+        mycursor = mydb.cursor()
         mycursor.execute("""
             CREATE TABLE IF NOT EXISTS userlogin (
                 userid VARCHAR(50) PRIMARY KEY,
@@ -25,12 +34,22 @@ def create_table():
             )
         """)
         mydb.commit()
+        mycursor.close()
+        mydb.close()
     except psycopg2.Error as err:
         print(f"Failed to create table: {err}")
 
 
 def create_table2():
     try:
+        mydb = psycopg2.connect(
+            host=os.getenv("DB_HOST"),
+            port=os.getenv("DB_PORT"),
+            database=os.getenv("DB_NAME"),
+            user=os.getenv("DB_USER"),
+            password=os.getenv("DB_PASSWORD")
+        )
+        mycursor = mydb.cursor()
         mycursor.execute("""
             CREATE TABLE IF NOT EXISTS appointment (
                 id VARCHAR(50) PRIMARY KEY,
@@ -44,9 +63,10 @@ def create_table2():
             )
         """)
         mydb.commit()
+        mycursor.close()
+        mydb.close()
     except psycopg2.Error as err:
         print(f"Failed to create table: {err}")
-
 
 
 csv_file = "https://raw.githubusercontent.com/srivatsav840/healthtap/refs/heads/main/Medicine_Details.csv"
@@ -56,6 +76,14 @@ symptoms_data = df['Uses'].unique()
 
 def create_table3():
     try:
+        mydb = psycopg2.connect(
+            host=os.getenv("DB_HOST"),
+            port=os.getenv("DB_PORT"),
+            database=os.getenv("DB_NAME"),
+            user=os.getenv("DB_USER"),
+            password=os.getenv("DB_PASSWORD")
+        )
+        mycursor = mydb.cursor()
         mycursor.execute("""
             CREATE TABLE IF NOT EXISTS doctoravail (
                 doctor_name VARCHAR(50),
@@ -71,9 +99,10 @@ def create_table3():
             )
         """)
         mydb.commit()
+        mycursor.close()
+        mydb.close()
     except psycopg2.Error as err:
         print(f"Failed to create table: {err}")
-
 
 
 @app.route('/')
@@ -107,7 +136,6 @@ def userhome():
 
 
 @app.route('/signin_submit', methods=['POST', 'GET'])
-@app.route('/signin_submit', methods=['POST', 'GET'])
 def signin_submit():
     try:
         if request.method == "POST":
@@ -115,8 +143,18 @@ def signin_submit():
             password = request.form['password']
             session['username'] = username
             create_table()
+            mydb = psycopg2.connect(
+                host=os.getenv("DB_HOST"),
+                port=os.getenv("DB_PORT"),
+                database=os.getenv("DB_NAME"),
+                user=os.getenv("DB_USER"),
+                password=os.getenv("DB_PASSWORD")
+            )
+            mycursor = mydb.cursor()
             mycursor.execute("SELECT * FROM userlogin WHERE userid = %s AND password = %s", (username, password))
             row = mycursor.fetchone()
+            mycursor.close()
+            mydb.close()
             if row is None:
                 re = "Username or password did not match. Please try again!"
                 return render_template('signin.html', re=re)
@@ -129,7 +167,6 @@ def signin_submit():
         return f"Unexpected error during signin: {e}"
 
 
-
 @app.route('/signup_submit', methods=["POST", "GET"])
 def signup_submit():
     try:
@@ -137,6 +174,15 @@ def signup_submit():
             user = request.form['username']
             pswd = request.form['password']
             create_table()
+            mydb = psycopg2.connect(
+                host=os.getenv("DB_HOST"),
+                port=os.getenv("DB_PORT"),
+                database=os.getenv("DB_NAME"),
+                user=os.getenv("DB_USER"),
+                password=os.getenv("DB_PASSWORD")
+            )
+            mycursor = mydb.cursor()
+
             mycursor.execute("SELECT userid FROM userlogin WHERE userid = %s", (user,))
             row = mycursor.fetchall()
             if not row:
@@ -144,6 +190,8 @@ def signup_submit():
                 values = (user, pswd)
                 mycursor.execute(sql, values)
                 mydb.commit()
+                mycursor.close()
+                mydb.close()
                 re = "Account successfully created. You can login now."
                 return render_template('signup.html', re=re)
             else:
@@ -272,6 +320,14 @@ def bookappointment():
             username = session.get('username', None)
 
             create_table2()
+            mydb = psycopg2.connect(
+                host=os.getenv("DB_HOST"),
+                port=os.getenv("DB_PORT"),
+                database=os.getenv("DB_NAME"),
+                user=os.getenv("DB_USER"),
+                password=os.getenv("DB_PASSWORD")
+            )
+            mycursor = mydb.cursor()
 
             mycursor.execute("SELECT datetime FROM appointment WHERE datetime = %s", (datetime_val,))
             row = mycursor.fetchone()
@@ -287,7 +343,10 @@ def bookappointment():
                 values = (id, name, age, gender, mobile, doctor, datetime_val, username)
                 mycursor.execute(sql, values)
                 mydb.commit()
-                flash(f"Your appointment has been successfully booked. Your ID is {id}. Be there before time.", "success")
+                mycursor.close()
+                mydb.close()
+                flash(f"Your appointment has been successfully booked. Your ID is {id}. Be there before time.",
+                      "success")
                 return redirect(url_for('bookappointment'))
 
         return render_template('appointment.html')
@@ -296,9 +355,18 @@ def bookappointment():
     except Exception as e:
         return f"Unexpected error while booking appointment: {e}"
 
+
 @app.route('/cancel')
 def cancel():
     try:
+        mydb = psycopg2.connect(
+            host=os.getenv("DB_HOST"),
+            port=os.getenv("DB_PORT"),
+            database=os.getenv("DB_NAME"),
+            user=os.getenv("DB_USER"),
+            password=os.getenv("DB_PASSWORD")
+        )
+        mycursor = mydb.cursor()
         username = session.get('username', None)
         if username:
             search_query = request.args.get('search', '').lower()
@@ -317,6 +385,8 @@ def cancel():
                 """
                 mycursor.execute(query, (username,))
             data = mycursor.fetchall()
+            mycursor.close()
+            mydb.close()
             return render_template('cancel.html', data=data)
         else:
             return render_template('cancel.html', ss="No username in session.")
@@ -326,10 +396,17 @@ def cancel():
         return render_template('cancel.html', ss=f"Unexpected error while fetching: {e}")
 
 
-
 @app.route('/edit', methods=['GET', 'POST'])
 def edit():
     try:
+        mydb = psycopg2.connect(
+            host=os.getenv("DB_HOST"),
+            port=os.getenv("DB_PORT"),
+            database=os.getenv("DB_NAME"),
+            user=os.getenv("DB_USER"),
+            password=os.getenv("DB_PASSWORD")
+        )
+        mycursor = mydb.cursor()
         if request.method == "POST":
             oldname = request.form['name']
             oldage = request.form['age']
@@ -340,11 +417,14 @@ def edit():
             username = session.get('username', None)
             appointment_id = request.args.get('id')
 
+
             mycursor.execute(
                 "UPDATE appointment SET name=%s, age=%s, gender=%s, mobile=%s, doctor=%s, datetime=%s WHERE id=%s AND username=%s",
                 (oldname, oldage, oldgender, oldcontact, olddoctor, olddate, appointment_id, username)
             )
             mydb.commit()
+            mycursor.close()
+            mydb.close()
             flash("Appointment successfully updated!", "success")
             return redirect(url_for('cancel'))
 
@@ -352,11 +432,14 @@ def edit():
             appointment_id = request.args.get('id')
             username = session.get('username', None)
 
+
             mycursor.execute(
                 "SELECT name, age, gender, mobile, doctor, datetime FROM appointment WHERE id=%s AND username=%s",
                 (appointment_id, username)
             )
             appointment = mycursor.fetchone()
+            mycursor.close()
+            mydb.close()
 
             if appointment:
                 oldname, oldage, oldgender, oldcontact, olddoctor, olddate = appointment
@@ -386,10 +469,19 @@ def edit():
 @app.route('/cancelappointment', methods=['POST', 'GET'])
 def cancelappointment():
     try:
+        mydb = psycopg2.connect(
+            host=os.getenv("DB_HOST"),
+            port=os.getenv("DB_PORT"),
+            database=os.getenv("DB_NAME"),
+            user=os.getenv("DB_USER"),
+            password=os.getenv("DB_PASSWORD")
+        )
+        mycursor = mydb.cursor()
         username = session.get('username', None)
 
         if request.method == "POST":
             id = request.form.get('task')
+
 
             # Delete the appointment
             query_delete = "DELETE FROM appointment WHERE id = %s AND username = %s"
@@ -401,6 +493,8 @@ def cancelappointment():
         query_select = "SELECT id, name, age, datetime, doctor, mobile FROM appointment WHERE username = %s"
         mycursor.execute(query_select, (username,))
         data = mycursor.fetchall()
+        mycursor.close()
+        mydb.close()
 
         return render_template('cancel.html', data=data)
 
@@ -413,18 +507,27 @@ def cancelappointment():
         return render_template('cancel.html', data=[])
 
 
-
-
 @app.route('/confirmcancel', methods=['POST'])
 def confirmcancel():
     try:
+        mydb = psycopg2.connect(
+            host=os.getenv("DB_HOST"),
+            port=os.getenv("DB_PORT"),
+            database=os.getenv("DB_NAME"),
+            user=os.getenv("DB_USER"),
+            password=os.getenv("DB_PASSWORD")
+        )
+        mycursor = mydb.cursor()
         if request.method == "POST":
             id = request.form.get('task')
             username = session.get('username', None)
 
+
             query_delete = "DELETE FROM appointment WHERE id = %s AND username = %s"
             mycursor.execute(query_delete, (id, username))
             mydb.commit()
+            mycursor.close()
+            mydb.close()
 
             flash("Appointment successfully canceled.", "success")
             return redirect(url_for('cancelappointment'))
@@ -442,7 +545,6 @@ def confirmcancel():
         return redirect(url_for('cancel'))
 
 
-
 @app.route('/adminenter', methods=['POST', 'GET'])
 def adminentry():
     if request.method == "POST":
@@ -458,6 +560,14 @@ def adminentry():
 @app.route('/show_doctors', methods=["POST", "GET"])
 def show_doctors():
     try:
+        mydb = psycopg2.connect(
+            host=os.getenv("DB_HOST"),
+            port=os.getenv("DB_PORT"),
+            database=os.getenv("DB_NAME"),
+            user=os.getenv("DB_USER"),
+            password=os.getenv("DB_PASSWORD")
+        )
+        mycursor = mydb.cursor()
         # PostgreSQL query syntax is the same here
         mycursor.execute("""
             SELECT doctor_name, doctor_id, doctor_specialization, 
@@ -466,6 +576,8 @@ def show_doctors():
             FROM doctoravail
         """)
         data = mycursor.fetchall()
+        mycursor.close()
+        mydb.close()
 
         if not data:
             data = "No doctor is appointed yet!"
@@ -477,7 +589,6 @@ def show_doctors():
 
     except Exception as e:
         return render_template('doctors_show.html', dat="An unexpected error occurred: " + str(e))
-
 
 
 @app.route('/edit_doctor', methods=['GET', 'POST'])
@@ -496,6 +607,14 @@ def edit_doctor():
         sunday = request.form.get('sunday')
 
         try:
+            mydb = psycopg2.connect(
+                host=os.getenv("DB_HOST"),
+                port=os.getenv("DB_PORT"),
+                database=os.getenv("DB_NAME"),
+                user=os.getenv("DB_USER"),
+                password=os.getenv("DB_PASSWORD")
+            )
+            mycursor = mydb.cursor()
             # PostgreSQL-compatible update query
             query = """
                 UPDATE doctoravail
@@ -505,11 +624,13 @@ def edit_doctor():
                 WHERE doctor_id = %s
             """
             values = (
-                doctorname, doctor_specialization, monday, tuesday, wednesday, 
+                doctorname, doctor_specialization, monday, tuesday, wednesday,
                 thursday, friday, saturday, sunday, doctor_id
             )
             mycursor.execute(query, values)
             mydb.commit()
+            mycursor.close()
+            mydb.close()
 
             flash("Doctor details successfully updated!", "success")
             return redirect(url_for('show_doctors'))
@@ -527,6 +648,14 @@ def edit_doctor():
         doctor_id = request.args.get('doctor_id')
 
         try:
+            mydb = psycopg2.connect(
+                host=os.getenv("DB_HOST"),
+                port=os.getenv("DB_PORT"),
+                database=os.getenv("DB_NAME"),
+                user=os.getenv("DB_USER"),
+                password=os.getenv("DB_PASSWORD")
+            )
+            mycursor = mydb.cursor()
             query = """
                 SELECT doctor_name, doctor_id, doctor_specialization, 
                        monday, tuesday, wednesday, thursday, 
@@ -536,6 +665,8 @@ def edit_doctor():
             """
             mycursor.execute(query, (doctor_id,))
             doctor = mycursor.fetchone()
+            mycursor.close()
+            mydb.close()
 
             if not doctor:
                 flash("Doctor not found.", "error")
@@ -551,15 +682,26 @@ def edit_doctor():
             flash(f"An unexpected error occurred: {str(e)}", "error")
             return redirect(url_for('show_doctors'))
 
+
 @app.route('/remove_doctor', methods=['POST'])
 def remove_doctor():
     doctor_id = request.form.get('doctor_id')
 
     try:
+        mydb = psycopg2.connect(
+            host=os.getenv("DB_HOST"),
+            port=os.getenv("DB_PORT"),
+            database=os.getenv("DB_NAME"),
+            user=os.getenv("DB_USER"),
+            password=os.getenv("DB_PASSWORD")
+        )
+        mycursor = mydb.cursor()
         # Delete the doctor from the database
         query = "DELETE FROM doctoravail WHERE doctor_id = %s"
         mycursor.execute(query, (doctor_id,))
         mydb.commit()
+        mycursor.close()
+        mydb.close()
 
         flash("Doctor successfully removed!", "success")
 
@@ -572,11 +714,9 @@ def remove_doctor():
     return redirect(url_for('show_doctors'))
 
 
-
 @app.route('/adminpage')
 def new_entry():
     return render_template('adminpage.html')
-
 
 
 @app.route('/add', methods=['POST', 'GET'])
@@ -594,6 +734,14 @@ def doctor_details_add():
         sunday = request.form['sunday']
 
         try:
+            mydb = psycopg2.connect(
+                host=os.getenv("DB_HOST"),
+                port=os.getenv("DB_PORT"),
+                database=os.getenv("DB_NAME"),
+                user=os.getenv("DB_USER"),
+                password=os.getenv("DB_PASSWORD")
+            )
+            mycursor = mydb.cursor()
             create_table3()  # Assumes this creates the `doctoravail` table if not exists
 
             query = """
@@ -611,6 +759,8 @@ def doctor_details_add():
 
             mycursor.execute(query, values)
             mydb.commit()
+            mycursor.close()
+            mydb.close()
             re = "Doctor data successfully added."
 
         except psycopg2.errors.UniqueViolation:
@@ -630,7 +780,6 @@ def doctor_details_add():
     return render_template('adminpage.html')
 
 
-
 @app.route('/doctor_availability', methods=['POST', 'GET'])
 def doctor_availability():
     return render_template('/doctor_availability.html')
@@ -642,9 +791,19 @@ def doctoravailability():
         doctor_specialization = request.form['doctor']
 
         try:
+            mydb = psycopg2.connect(
+                host=os.getenv("DB_HOST"),
+                port=os.getenv("DB_PORT"),
+                database=os.getenv("DB_NAME"),
+                user=os.getenv("DB_USER"),
+                password=os.getenv("DB_PASSWORD")
+            )
+            mycursor = mydb.cursor()
             query = "SELECT * FROM doctoravail WHERE doctor_specialization = %s"
             mycursor.execute(query, (doctor_specialization,))
             data = mycursor.fetchall()
+            mycursor.close()
+            mydb.close()
             print("Fetched Data:", data)
 
             if not data:
@@ -664,6 +823,7 @@ def doctoravailability():
 if __name__ == "__main__":
     print("Starting Flask app...")
     import os
+
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
 
