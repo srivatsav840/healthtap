@@ -7,10 +7,11 @@ import pandas as pd
 
 app = Flask(__name__)
 mydb = psycopg2.connect(
-    host=os.environ.get('DB_HOST'),
-    user=os.environ.get('DB_USER'),
-    password=os.environ.get('DB_PASSWORD'),
-    database=os.environ.get('DB_NAME')
+    host=os.getenv("DB_HOST"),
+    port=os.getenv("DB_PORT"),
+    database=os.getenv("DB_NAME"),
+    user=os.getenv("DB_USER"),
+    password=os.getenv("DB_PASSWORD")
 )
 mycursor = mydb.cursor()
 app.secret_key = 'sri@vatsav*40'
