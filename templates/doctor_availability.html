@@ -148,7 +148,7 @@ input[type="submit"]:hover {
                 {% for doctor in data %}
                     <div class="doctor-card">
                         <h3>Doctor Name: {{ doctor[0] }}</h3>
-                        <p><strong>Specialization:</strong> {{ doctor[1] }}</p>
+                        <p><strong>Specialization:</strong> {{ doctor[2] }}</p>
                         <p>Available Timings:</p>
                         <table class="schedule-table">
                             <tr>
@@ -157,31 +157,31 @@ input[type="submit"]:hover {
                             </tr>
                             <tr>
                                 <td>Monday</td>
-                                <td>{{ doctor[2] }}</td>
-                            </tr>
-                            <tr>
-                                <td>Tuesday</td>
                                 <td>{{ doctor[3] }}</td>
                             </tr>
                             <tr>
-                                <td>Wednesday</td>
+                                <td>Tuesday</td>
                                 <td>{{ doctor[4] }}</td>
                             </tr>
                             <tr>
-                                <td>Thursday</td>
+                                <td>Wednesday</td>
                                 <td>{{ doctor[5] }}</td>
                             </tr>
                             <tr>
-                                <td>Friday</td>
+                                <td>Thursday</td>
                                 <td>{{ doctor[6] }}</td>
                             </tr>
                             <tr>
-                                <td>Saturday</td>
+                                <td>Friday</td>
                                 <td>{{ doctor[7] }}</td>
                             </tr>
                             <tr>
-                                <td>Sunday</td>
+                                <td>Saturday</td>
                                 <td>{{ doctor[8] }}</td>
+                            </tr>
+                            <tr>
+                                <td>Sunday</td>
+                                <td>{{ doctor[9] }}</td>
                             </tr>
                         </table>
                     </div>
