@@ -808,14 +808,14 @@ def doctoravailability():
 
             if not data:
                 message = "No doctor appointed for your necessity"
-                return render_template('doctor_availability.html', data=None, message=message)
+                return render_template('doctor_availability.html', data=message)
 
             return render_template('doctor_availability.html', data=data)
 
         except Exception as e:
             print("Database Error:", str(e))
             message = f"Error fetching doctor availability: {str(e)}"
-            return render_template('doctor_availability.html', data=None, message=message)
+            return render_template('doctor_availability.html', data=message)
 
     return render_template('doctor_availability.html', data=None)
 
