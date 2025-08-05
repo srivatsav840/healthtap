@@ -1,4 +1,4 @@
-import replicateil
+import replicate
 from flask import Flask, render_template, redirect, session, url_for, request, flash, jsonify
 import psycopg2
 import random
@@ -24,6 +24,11 @@ def login_required(f):
             return redirect(url_for('signin'))
         return f(*args, **kwargs)
     return decorated_function
+@app.route('/logout', methods=['POST', 'GET'])
+def logout():
+    session.clear()  # Clears all session data, effectively logging out the user
+    flash("You have been logged out successfully.", "success")
+    return redirect(url_for('signin'))
 
 
 def create_table():
@@ -838,6 +843,7 @@ if __name__ == "__main__":
 
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
