@@ -1,4 +1,4 @@
-import replicate
+import replicateil
 from flask import Flask, render_template, redirect, session, url_for, request, flash, jsonify
 import psycopg2
 import random
@@ -38,8 +38,8 @@ def create_table():
         mycursor = mydb.cursor()
         mycursor.execute("""
             CREATE TABLE IF NOT EXISTS userlogin (
-                userid VARCHAR(50) PRIMARY KEY,
-                password VARCHAR(100)
+                username VARCHAR(50),email VARCHAR(50) PRIMARY KEY,  
+                password VARCHAR(100),phonenumber VARCHAR(50)
             )
         """)
         mydb.commit()
@@ -149,7 +149,7 @@ def userhome():
 def signin_submit():
     try:
         if request.method == "POST":
-            username = request.form['username']
+            email = request.form['email']
             password = request.form['password']
             session['username'] = username
             create_table()
@@ -161,7 +161,7 @@ def signin_submit():
                 password=os.getenv("DB_PASSWORD")
             )
             mycursor = mydb.cursor()
-            mycursor.execute("SELECT * FROM userlogin WHERE userid = %s AND password = %s", (username, password))
+            mycursor.execute("SELECT * FROM userlogin WHERE email = %s AND password = %s", (username, password))
             row = mycursor.fetchone()
             mycursor.close()
             mydb.close()
@@ -182,6 +182,8 @@ def signup_submit():
     try:
         if request.method == "POST":
             user = request.form['username']
+            email = request.form['email']
+            phonenumber = request.form['phonenumber']
             pswd = request.form['password']
             create_table()
             mydb = psycopg2.connect(
@@ -193,35 +195,28 @@ def signup_submit():
             )
             mycursor = mydb.cursor()
 
-            mycursor.execute("SELECT userid FROM userlogin WHERE userid = %s", (user,))
+            mycursor.execute("SELECT email FROM userlogin WHERE email = %s", (email,))
             row = mycursor.fetchall()
             if not row:
-                sql = "INSERT INTO userlogin (userid, password) VALUES (%s, %s)"
-                values = (user, pswd)
+                sql = "INSERT INTO userlogin (userid,email, password, phonenumber) VALUES (%s, %s,%s,%s)"
+                values = (user,email, pswd, phonenumber)
                 mycursor.execute(sql, values)
                 mydb.commit()
                 mycursor.close()
                 mydb.close()
                 re = "Account successfully created. You can login now."
-                return render_template('signup.html', re=re)
+                return render_template('signin.html', re=re)
             else:
-                ss = "Username already exists. Use a different username."
-                return render_template('signup.html', ss=ss)
-        return render_template('signup.html')
+                re = "Username already exists. Use a different username."
+                return render_template('signin.html', re=re)
+        return render_template('signin.html')
     except psycopg2.Error as err:
         return f"Database error during signup: {err}"
     except Exception as e:
         return f"Unexpected error during signup: {e}"
 
 
-@app.route('/gosignin', methods=["POST", "GET"])
-def gosignin():
-    return redirect(url_for('signin'))
 
-
-@app.route('/gosignup', methods=["POST", "GET"])
-def gosignup():
-    return redirect(url_for('signup'))
 
 
 @app.route('/appointmentbook', methods=["POST", "GET"])
@@ -843,5 +838,6 @@ if __name__ == "__main__":
 
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
+
 
 
