@@ -85,28 +85,32 @@
         <label for="doctor_specialization">Specialization:</label>
         <input type="text" id="doctor_specialization" name="doctor_specialization" value="{{ doctor[2] }}" required>
 
+        <label for="doctor_Qualification">Qualification:</label>
+        <input type="text" id="doctor_Qualification" name="doctor_Qualification" value="{{ doctor[3] }}" required>
+
+
         <label for="monday">Monday:</label>
-        <input type="text" id="monday" name="monday" value="{{ doctor[3] }}">
+        <input type="text" id="monday" name="monday" value="{{ doctor[4] }}">
 
         <label for="tuesday">Tuesday:</label>
-        <input type="text" id="tuesday" name="tuesday" value="{{ doctor[4] }}">
+        <input type="text" id="tuesday" name="tuesday" value="{{ doctor[5] }}">
 
         <label for="wednesday">Wednesday:</label>
-        <input type="text" id="wednesday" name="wednesday" value="{{ doctor[5] }}">
+        <input type="text" id="wednesday" name="wednesday" value="{{ doctor[6] }}">
 
         <label for="thursday">Thursday:</label>
-        <input type="text" id="thursday" name="thursday" value="{{ doctor[6] }}">
+        <input type="text" id="thursday" name="thursday" value="{{ doctor[7] }}">
 
         <label for="friday">Friday:</label>
-        <input type="text" id="friday" name="friday" value="{{ doctor[7] }}">
+        <input type="text" id="friday" name="friday" value="{{ doctor[8] }}">
 
         <label for="saturday">Saturday:</label>
-        <input type="text" id="saturday" name="saturday" value="{{ doctor[8] }}">
+        <input type="text" id="saturday" name="saturday" value="{{ doctor[9] }}">
 
         <label for="sunday">Sunday:</label>
-        <input type="text" id="sunday" name="sunday" value="{{ doctor[9] }}">
+        <input type="text" id="sunday" name="sunday" value="{{ doctor[10] }}">
 
-        <input type="submit" value="Update Doctor">
+        <input type="submit" value="Update">
     </form>
     <a href="{{ url_for('show_doctors') }}">Back to Doctor List</a>
 </body>
