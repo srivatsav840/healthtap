@@ -102,6 +102,7 @@ def create_table3():
             CREATE TABLE IF NOT EXISTS doctoravail (
                 doctor_name VARCHAR(50),
                 doctor_id VARCHAR(50),
+                qualification VARCHAR(50),
                 doctor_specialization VARCHAR(100),
                 monday VARCHAR(20),
                 tuesday VARCHAR(20),
@@ -741,6 +742,7 @@ def doctor_details_add():
     if request.method == "POST":
         doctorid = request.form['doctor_id']
         doctorname = request.form['doctorname']
+        qualification = request.form['qualification']
         doctor = request.form['doctor']
         monday = request.form['monday']
         tuesday = request.form['tuesday']
@@ -763,7 +765,7 @@ def doctor_details_add():
 
             query = """
                 INSERT INTO doctoravail (
-                    doctor_name, doctor_id, doctor_specialization,
+                    doctor_name, doctor_id,qualification,doctor_specialization,
                     monday, tuesday, wednesday, thursday, 
                     friday, saturday, sunday
                 ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
@@ -843,6 +845,7 @@ if __name__ == "__main__":
 
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
