@@ -1,322 +1,438 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Suraksha Hospital | Book Appointments Online</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f8fafc;
-            color: #222;
-            min-height: 100vh;
-        }
-        .navbar {
-            background: #0866c6;
-            box-shadow: 0 2px 8px rgba(30, 113, 183, 0.07);
-        }
-        .navbar-brand {
-            font-size: 1.9em;
-            font-weight: bold;
-            color: #fff !important;
-            letter-spacing: 1px;
-        }
-        .navbar-nav .nav-link {
-            color: #f9f9f9 !important;
-            font-weight: 500;
-            margin-left: 10px;
-        }
-        .navbar-nav .nav-link:hover, .navbar-nav .nav-link.active {
-            color: #ffe04a !important;
-        }
-        .navbar-brand .subtitle {
-            font-size: 0.92em;
-            font-weight: 300;
-            color: #ddeaff;
-            letter-spacing: 0.1em;
-        }
-        /* Login/Register button styles */
-        .navbar-buttons .btn {
-            border-radius: 25px;
-            font-weight: 500;
-            padding: 0.42em 1.35em;
-            margin-left: 10px;
-            border: 0;
-            box-shadow: 0 1px 4px rgba(8,102,198,0.08);
-            transition: background 0.19s, color 0.19s;
-        }
-        .navbar-buttons .btn-login {
-            background: #fff;
-            color: #0866c6;
-            border: 1px solid #e0eefa;
-        }
-        .navbar-buttons .btn-login:hover {
-            background: #ddeaff;
-        }
-        .navbar-buttons .btn-register {
-            background: #fde385;
-            color: #043568;
-        }
-        .navbar-buttons .btn-register:hover {
-            background: #ffe04a;
-            color: #042244;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Suraksha Hospital | Book Appointments Online</title>
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f8fafc;
+      color: #222;
+      min-height: 100vh;
+    }
+    .navbar {
+      background: #0866c6;
+      box-shadow: 0 2px 8px rgba(30, 113, 183, 0.07);
+    }
+    .navbar-brand {
+      font-size: 1.8em;
+      font-weight: bold;
+      color: #fff !important;
+      letter-spacing: 1px;
+      user-select: none;
+    }
+    .navbar-nav .nav-link {
+      color: #f9f9f9 !important;
+      font-weight: 500;
+      margin-left: 12px;
+      user-select: none;
+      white-space: nowrap;
+    }
+    .navbar-nav .nav-link:hover,
+    .navbar-nav .nav-link.active {
+      color: #ffe04a !important;
+    }
+    .navbar-brand .subtitle {
+      font-size: 0.9em;
+      font-weight: 300;
+      color: #ddeaff;
+      letter-spacing: 0.1em;
+      user-select: none;
+      margin-top: 2px;
+    }
+    /* Login/Register button styles */
+    .navbar-buttons .btn {
+      border-radius: 25px;
+      font-weight: 500;
+      padding: 0.42em 1.35em;
+      margin-left: 12px;
+      border: 0;
+      box-shadow: 0 1px 4px rgba(8, 102, 198, 0.08);
+      transition: background 0.19s, color 0.19s;
+      white-space: nowrap;
+    }
+    .navbar-buttons .btn-login {
+      background: #fff;
+      color: #0866c6;
+      border: 1px solid #e0eefa;
+    }
+    .navbar-buttons .btn-login:hover {
+      background: #ddeaff;
+    }
+    .navbar-buttons .btn-register {
+      background: #fde385;
+      color: #043568;
+    }
+    .navbar-buttons .btn-register:hover {
+      background: #ffe04a;
+      color: #042244;
+    }
 
-        .hero-section {
-            background: linear-gradient(90deg, #0866c6 62%, #fff 100%);
-            padding: 70px 0 60px 0;
-            position: relative;
-        }
-        .hero-title {
-            color: #fff;
-            font-size: 2.5em;
-            font-weight: 700;
-            text-shadow: 1px 1px 10px rgba(20,73,150,0.10);
-        }
-        .hero-desc {
-            font-size: 1.15em;
-            color: #e6e6e6;
-            margin-bottom: 32px;
-            max-width: 505px;
-        }
-        .hero-buttons .btn {
-            background: #fde385;
-            color: #043568;
-            font-weight: 600;
-            border-radius: 25px;
-            padding: 0.8em 2.2em;
-            margin-right: 16px;
-            box-shadow: 0 2px 6px rgba(8,102,198,0.05);
-            border: 0;
-            transition: background 0.2s;
-        }
-        .hero-buttons .btn:hover {
-            background: #ffe04a;
-            color: #042244;
-        }
-        .hero-img {
-            max-width: 340px;
-            width: 100%;
-            filter: drop-shadow(0 12px 24px rgba(50,123,195,0.07));
-        }
-        .section {
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 3px 18px rgba(129, 203, 247, 0.05);
-            padding: 48px 30px 38px 30px;
-            margin-bottom: 40px;
-        }
-        .section-title {
-            color: #0866c6;
-            font-size: 2em;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-        .section-desc {
-            font-size: 1.15em;
-            color: #3d4d63;
-            margin-bottom: 20px;
-        }
-        .benefits-row {
-            margin-top: 25px;
-            margin-bottom: 15px;
-        }
-        .benefit-card {
-            border: 1px solid #e0ecef;
-            border-radius: 12px;
-            background: #f3f8fc;
-            padding: 22px 18px;
-            height: 100%;
-            text-align: center;
-            transition: box-shadow 0.18s;
-        }
-        .benefit-card:hover {
-            box-shadow: 0 2px 14px rgba(30,113,183,0.13);
-        }
-        .benefit-icon {
-            font-size: 2em;
-            color: #0866c6;
-            margin-bottom: 12px;
-        }
-        .cta-section {
-            padding: 45px 0 30px 0;
-            background: linear-gradient(90deg, #f8fafc 41%, #daf0fe 120%);
-        }
-        .cta-buttons .btn {
-            background: #0866c6;
-            color: #fff;
-            border-radius: 25px;
-            padding: 0.75em 2em;
-            margin-right: 13px;
-            font-weight: 500;
-            border: none;
-            transition: background 0.2s;
-        }
-        .cta-buttons .btn:hover {
-            background: #054180;
-            color: #ffea00;
-        }
-        .footer {
-            background: #0866c6;
-            color: #e6f2ff;
-            text-align: center;
-            padding: 26px 8px 18px 8px;
-            font-size: 1.11em;
-            border-top-left-radius: 18px;
-            border-top-right-radius: 18px;
-            margin-top: 70px;
-        }
-        .footer a {
-            color: #ffe04a;
-            text-decoration: none;
-            margin: 0 8px;
-            font-weight: 500;
-            transition: color 0.1s;
-        }
-        .footer a:hover {
-            color: #fffaca;
-            text-decoration: underline;
-        }
-        @media (max-width: 991px) {
-            .hero-img { display: none; }
-            .section, .hero-section { text-align: center; }
-            .navbar-buttons { margin-top: 15px; }
-        }
-        @media (max-width: 600px) {
-            .section, .hero-section { padding: 25px 8px; }
-            .footer { font-size: 1em; }
-            .hero-title { font-size: 1.5em; }
-        }
-    </style>
+    /* Hero Section */
+    .hero-section {
+      background: linear-gradient(90deg, #0866c6 62%, #fff 100%);
+      padding: 70px 15px 60px 15px;
+      position: relative;
+      user-select: none;
+    }
+    .hero-title {
+      color: #fff;
+      font-size: 2.5em;
+      font-weight: 700;
+      text-shadow: 1px 1px 10px rgba(20, 73, 150, 0.1);
+      margin-bottom: 0.5rem;
+    }
+    .hero-desc {
+      font-size: 1.15em;
+      color: #e6e6e6;
+      margin-bottom: 32px;
+      max-width: 505px;
+      line-height: 1.45;
+    }
+    .hero-buttons .btn {
+      background: #fde385;
+      color: #043568;
+      font-weight: 600;
+      border-radius: 25px;
+      padding: 0.8em 2.2em;
+      margin-right: 16px;
+      box-shadow: 0 2px 6px rgba(8, 102, 198, 0.05);
+      border: 0;
+      transition: background 0.2s, color 0.2s;
+      white-space: nowrap;
+      user-select: none;
+    }
+    .hero-buttons .btn:hover {
+      background: #ffe04a;
+      color: #042244;
+    }
+    .hero-img {
+      max-width: 340px;
+      width: 100%;
+      filter: drop-shadow(0 12px 24px rgba(50, 123, 195, 0.07));
+      user-select: none;
+    }
+
+    /* Sections */
+    .section {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 3px 18px rgba(129, 203, 247, 0.05);
+      padding: 48px 30px 38px 30px;
+      margin-bottom: 40px;
+      user-select: none;
+    }
+    .section-title {
+      color: #0866c6;
+      font-size: 2em;
+      font-weight: 700;
+      margin-bottom: 10px;
+      text-align: center;
+      user-select: text;
+    }
+    .section-desc {
+      font-size: 1.15em;
+      color: #3d4d63;
+      margin-bottom: 20px;
+      text-align: center;
+      user-select: text;
+    }
+    .benefits-row {
+      margin-top: 25px;
+      margin-bottom: 15px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 22px;
+    }
+    .benefit-card {
+      border: 1px solid #e0ecef;
+      border-radius: 12px;
+      background: #f3f8fc;
+      padding: 22px 18px;
+      height: 100%;
+      text-align: center;
+      transition: box-shadow 0.18s;
+      width: 280px;
+      box-sizing: border-box;
+      user-select: text;
+    }
+    .benefit-card:hover {
+      box-shadow: 0 2px 14px rgba(30, 113, 183, 0.13);
+    }
+    .benefit-icon {
+      font-size: 2.4em;
+      color: #0866c6;
+      margin-bottom: 12px;
+      user-select: none;
+    }
+
+    /* CTA Section */
+    .cta-section {
+      padding: 45px 10px 30px 10px;
+      background: linear-gradient(90deg, #f8fafc 41%, #daf0fe 120%);
+      user-select: none;
+    }
+    .cta-buttons {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 14px;
+      user-select: none;
+    }
+    .cta-buttons .btn {
+      background: #0866c6;
+      color: #fff;
+      border-radius: 25px;
+      padding: 0.75em 2em;
+      font-weight: 500;
+      border: none;
+      transition: background 0.2s;
+      width: auto;
+      min-width: 140px;
+      user-select: none;
+    }
+    .cta-buttons .btn:hover {
+      background: #054180;
+      color: #ffea00;
+    }
+    .cta-buttons .btn-outline-primary {
+      background: #fff !important;
+      color: #0866c6 !important;
+      border: 1px solid #ddeaff !important;
+      user-select: none;
+    }
+
+    /* Footer */
+    .footer {
+      background: #0866c6;
+      color: #e6f2ff;
+      text-align: center;
+      padding: 26px 8px 18px 8px;
+      font-size: 1.11em;
+      border-top-left-radius: 18px;
+      border-top-right-radius: 18px;
+      margin-top: 70px;
+      user-select: none;
+    }
+    .footer a {
+      color: #ffe04a;
+      text-decoration: none;
+      margin: 0 8px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .footer a:hover {
+      color: #fffaca;
+      text-decoration: underline;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 991px) {
+      .hero-img {
+        margin: 24px auto 0;
+        display: block;
+        max-width: 90%;
+      }
+      .hero-buttons {
+        justify-content: center !important;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+      .hero-title {
+        font-size: 2rem;
+      }
+      .section, .hero-section {
+        padding-left: 15px;
+        padding-right: 15px;
+        text-align: center;
+      }
+      .navbar-buttons {
+        margin-top: 12px;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .navbar-buttons .btn {
+        flex-grow: 1;
+        text-align: center;
+        margin-left: 0 !important;
+        padding: 0.4em 0;
+      }
+      .navbar-collapse {
+        justify-content: center !important;
+      }
+    }
+    @media (max-width: 600px) {
+      .hero-title {
+        font-size: 1.5rem;
+      }
+      .section-title {
+        font-size: 1.6rem;
+      }
+      .section-desc {
+        font-size: 1rem;
+        margin-bottom: 15px;
+      }
+      .benefit-card {
+        width: 100%;
+      }
+      .cta-buttons .btn {
+        width: 100%;
+        min-width: unset;
+      }
+    }
+  </style>
 </head>
 <body>
-    <!-- Navbar/Header -->
-    <nav class="navbar navbar-expand-lg">
-        <div class="container">
-            <a class="navbar-brand d-flex flex-column" href="#">
-                Suraksha Hospital
-                <span class="subtitle">Your Trusted Healthcare Partner</span>
-            </a>
-            <button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link active" href="#features">Features</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#benefits">Benefits</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#get-started">Get Started</a></li>
-                </ul>
-                <div class="navbar-buttons d-flex ms-lg-3">
-                    <a href="/signin" class="btn btn-login">Login</a>
-                    <a href="/signin" class="btn btn-register">Register</a>
-                </div>
-            </div>
+  <!-- Navbar/Header -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand d-flex flex-column" href="#">
+        Suraksha Hospital
+        <span class="subtitle">Your Trusted Healthcare Partner</span>
+      </a>
+      <button
+        class="navbar-toggler bg-light"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link active" href="#features">Features</a></li>
+          <li class="nav-item"><a class="nav-link" href="#benefits">Benefits</a></li>
+          <li class="nav-item"><a class="nav-link" href="#get-started">Get Started</a></li>
+        </ul>
+        <div class="navbar-buttons d-flex ms-lg-3">
+          <a href="/signin" class="btn btn-login" tabindex="0" role="button">Login</a>
+          <a href="/signup" class="btn btn-register" tabindex="0" role="button">Register</a>
         </div>
-    </nav>
+      </div>
+    </div>
+  </nav>
 
-    <!-- Hero Section -->
-    <section class="hero-section">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-7">
-                    <h1 class="hero-title mb-3">Book Your Appointment Instantly</h1>
-                    <p class="hero-desc">
-                        Experience seamless healthcare at Suraksha Hospital.<br>
-                        Fast, reliable online appointments with top doctors and modern facilities.
-                    </p>
-                    <div class="hero-buttons">
-                        <a href="/user" class="btn me-2">Book Appointment</a>
-                        <a href="/doctor_availability" class="btn btn-outline-primary" style="background:#fff; color:#0866c6; border:1px solid #ddeaff;">Find Doctors</a>
-                    </div>
-                </div>
-                <div class="col-lg-5 d-flex justify-content-end">
-                    <img src="https://img.freepik.com/free-vector/hospital-building-modern-parking-lot-traffic-car-ambulance-flat-design-illustration_1150-60999.jpg?w=700" alt="Hospital" class="hero-img rounded shadow">
-                </div>
-            </div>
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container">
+      <div class="row align-items-center justify-content-center">
+        <div class="col-lg-7 col-md-10 col-sm-10">
+          <h1 class="hero-title">Book Your Appointment Instantly</h1>
+          <p class="hero-desc">
+            Experience seamless healthcare at Suraksha Hospital.<br />
+            Fast, reliable online appointments with top doctors and modern facilities.
+          </p>
+          <div class="hero-buttons d-flex">
+            <a href="/signin" class="btn me-2" tabindex="0" role="button">Book Appointment</a>
+            <a
+              href="/doctor_availability"
+              class="btn btn-outline-primary"
+              tabindex="0"
+              role="button"
+              style="background: #fff; color: #0866c6; border: 1px solid #ddeaff"
+              >Find Doctors</a
+            >
+          </div>
         </div>
-    </section>
+        <div class="col-lg-5 d-none d-lg-flex justify-content-end">
+          <img
+            src="https://img.freepik.com/free-vector/hospital-building-modern-parking-lot-traffic-car-ambulance-flat-design-illustration_1150-60999.jpg?w=700"
+            alt="Hospital"
+            class="hero-img rounded shadow"
+            loading="lazy"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <!-- Features Section -->
-    <section id="features" class="section container mt-5">
-        <div class="section-title">Our Key Features</div>
-        <div class="section-desc">
-            Manage all your appointments online – anytime, anywhere. User-friendly search to find doctors, request appointments, and manage your visit history.
-        </div>
-        <div class="row benefits-row">
-            <div class="col-md-4 mb-4">
-                <div class="benefit-card">
-                    <div class="benefit-icon">&#128137;</div>
-                    <h5 style="color:#0866c6;">Easy Booking</h5>
-                    <p>Book your appointment within seconds with a simple, secure process.</p>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="benefit-card">
-                    <div class="benefit-icon">&#128104;&#8205;&#9877;&#65039;</div>
-                    <h5 style="color:#0866c6;">Expert Doctors</h5>
-                    <p>Access highly qualified specialists across all major medical fields.</p>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="benefit-card">
-                    <div class="benefit-icon">&#128184;</div>
-                    <h5 style="color:#0866c6;">Transparent Pricing</h5>
-                    <p>View consultation fees and choose slots that fit your needs and budget.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+  <!-- Features Section -->
+  <section id="features" class="section container mt-5">
+    <div class="section-title">Our Key Features</div>
+    <div class="section-desc">
+      Manage all your appointments online – anytime, anywhere. User-friendly search to find doctors, request appointments, and manage your visit history.
+    </div>
+    <div class="benefits-row">
+      <div class="benefit-card">
+        <div class="benefit-icon" aria-hidden="true">&#128137;</div>
+        <h5 style="color:#0866c6;">Easy Booking</h5>
+        <p>Book your appointment within seconds with a simple, secure process.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon" aria-hidden="true">&#128104;&#8205;&#9877;&#65039;</div>
+        <h5 style="color:#0866c6;">Expert Doctors</h5>
+        <p>Access highly qualified specialists across all major medical fields.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon" aria-hidden="true">&#128184;</div>
+        <h5 style="color:#0866c6;">Transparent Pricing</h5>
+        <p>View consultation fees and choose slots that fit your needs and budget.</p>
+      </div>
+    </div>
+  </section>
 
-    <!-- Benefits Section -->
-    <section id="benefits" class="section container">
-        <div class="section-title">Why Choose Suraksha Hospital?</div>
-        <div class="row benefits-row">
-            <div class="col-md-4 mb-4">
-                <div class="benefit-card">
-                    <div class="benefit-icon">&#9201;&#65039;</div>
-                    <h5 style="color:#0866c6;">Time Saving</h5>
-                    <p>Say goodbye to long queues and wasted time.</p>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="benefit-card">
-                    <div class="benefit-icon">&#128241;</div>
-                    <h5 style="color:#0866c6;">Instant Updates</h5>
-                    <p>Get SMS/Email alerts for confirmations, reminders, and reports.</p>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="benefit-card">
-                    <div class="benefit-icon">&#128106;</div>
-                    <h5 style="color:#0866c6;">Personalized Care</h5>
-                    <p>Dedicated support team and great patient care throughout.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+  <!-- Benefits Section -->
+  <section id="benefits" class="section container">
+    <div class="section-title">Why Choose Suraksha Hospital?</div>
+    <div class="benefits-row">
+      <div class="benefit-card">
+        <div class="benefit-icon" aria-hidden="true">&#9201;&#65039;</div>
+        <h5 style="color:#0866c6;">Time Saving</h5>
+        <p>Say goodbye to long queues and wasted time.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon" aria-hidden="true">&#128241;</div>
+        <h5 style="color:#0866c6;">Instant Updates</h5>
+        <p>Get SMS/Email alerts for confirmations, reminders, and reports.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon" aria-hidden="true">&#128106;</div>
+        <h5 style="color:#0866c6;">Personalized Care</h5>
+        <p>Dedicated support team and great patient care throughout.</p>
+      </div>
+    </div>
+  </section>
 
-    <!-- Get Started / Call-To-Action -->
-    <section id="get-started" class="cta-section">
-        <div class="container text-center">
-            <h2 style="color:#0866c6; font-weight:700; margin-bottom:16px;">Get Started with Suraksha Hospital</h2>
-            <p class="mb-4" style="font-size:1.13em;">Sign up or log in now to access your healthcare dashboard and book anytime!</p>
-            <div class="cta-buttons">
-                <a href="/signup" class="btn me-2">Sign Up</a>
-                <a href="/signin" class="btn btn-outline-primary" style="background:#fff; color:#0866c6; border:1px solid #ddeaff;">Sign In</a>
-            </div>
-        </div>
-    </section>
+  <!-- CTA Section -->
+  <section id="get-started" class="cta-section">
+    <div class="container text-center">
+      <h2 style="color: #0866c6; font-weight: 700; margin-bottom: 16px">Get Started with Suraksha Hospital</h2>
+      <p class="mb-4" style="font-size: 1.13em">
+        Sign up or log in now to access your healthcare dashboard and book
+        anytime!
+      </p>
+      <div class="cta-buttons">
+        <a href="/signup" class="btn me-2" tabindex="0" role="button">Sign Up</a>
+        <a
+          href="/signin"
+          class="btn btn-outline-primary"
+          tabindex="0"
+          role="button"
+          style="background: #fff; color: #0866c6; border: 1px solid #ddeaff"
+          >Sign In</a
+        >
+      </div>
+    </div>
+  </section>
 
-    <!-- Footer -->
-    <footer class="footer">
-        &copy; 2024 Suraksha Hospital. All rights reserved.
-        <div class="mt-2">
-            <a href="#features">Features</a> |
-            <a href="#benefits">Benefits</a> |
-            <a href="#get-started">Get Started</a>
-        </div>
-    </footer>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Footer -->
+  <footer class="footer" role="contentinfo">
+    &copy; 2024 Suraksha Hospital. All rights reserved.
+    <div class="mt-2">
+      <a href="#features">Features</a> |
+      <a href="#benefits">Benefits</a> |
+      <a href="#get-started">Get Started</a>
+    </div>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
