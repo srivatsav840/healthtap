@@ -1,111 +1,227 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>AIDoctor</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(to right, #6a11cb, black);
-            color: #fff;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            text-align: center;
-        }
-        h1 {
-            margin-bottom: 20px;
-            font-size: 2.5em;
-            color: #fff;
-        }
-        a {
-            color: #ff6b6b;
-            text-decoration: none;
-            font-size: 1.2em;
-            margin-bottom: 20px;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-        form {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(10px);
-            width: 100%;
-            max-width: 600px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        label {
-            display: block;
-            margin-bottom: 15px;
-            font-size: 1.2em;
-        }
-        input[type="text"] {
-            width: 100%;
-            max-width: 500px;
-            padding: 15px;
-            border: 2px solid #ff6b6b;
-            border-radius: 5px;
-            font-size: 1.2em;
-            background: rgba(255, 255, 255, 0.2);
-            color: #fff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-            transition: background 0.3s, border-color 0.3s;
-            margin-bottom: 20px; /* Increased distance */
-        }
-        input[type="text"]::placeholder {
-            color: #ddd;
-        }
-        input[type="text"]:focus {
-            background: rgba(255, 255, 255, 0.3);
-            border-color: #ff4757;
-            outline: none;
-        }
-        button.submit {
-            padding: 12px 25px;
-            background-color: #ff6b6b;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 1.2em;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            align-self: center; /* Center button */
-        }
-        button.submit:hover {
-            background-color: #ff4757;
-        }
-        .response {
-            margin-top: 20px;
-            color: #fff;
-            font-size: 1.2em;
-        }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AI Doctor | Suraksha Hospital</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+  /* Reset */
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+  body, html {
+    margin: 0; padding: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #0866c6 0%, #229bed 100%);
+    min-height: 100vh;
+    color: #1a1a1a;
+  }
+
+  /* Navbar styles */
+  nav.navbar {
+    background-color: #0747a6;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    height: 56px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+ .navbar .brand {
+    font-weight: 800;
+    font-size: 2.2rem; /* bigger text */
+    color: #fff;  /* pure white */
+    user-select: none;
+}
+  .nav-links {
+    display: flex;
+    gap: 18px;
+  }
+  .nav-links a {
+    color: #ddeaff;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
+  }
+  .nav-links a:hover,
+  .nav-links a:focus {
+    background-color: #0b52d4;
+    outline: none;
+  }
+
+  /* Responsive hamburger menu for smaller screens */
+  .hamburger {
+    display: none;
+    font-size: 1.6rem;
+    color: #ddeaff;
+    cursor: pointer;
+  }
+  @media (max-width: 600px) {
+    .nav-links {
+      position: fixed;
+      top: 56px;
+      right: 0;
+      background-color: #0747a6;
+      flex-direction: column;
+      width: 200px;
+      height: calc(100% - 56px);
+      padding-top: 20px;
+      gap: 0;
+      overflow-y: auto;
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+      border-top-left-radius: 12px;
+      border-bottom-left-radius: 12px;
+      z-index: 1050;
+    }
+    .nav-links a {
+      padding: 14px 20px;
+      border-bottom: 1px solid #0b52d4;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .nav-links a:last-child {
+      border-bottom: none;
+    }
+    .nav-links.open {
+      transform: translateX(0);
+    }
+    .hamburger {
+      display: block;
+    }
+  }
+
+  /* Page content */
+  main {
+    margin: 70px auto 40px auto;
+    padding: 0 20px;
+    max-width: 600px;
+    text-align: center;
+    color: #1a1a1a;
+  }
+  h1 {
+    color: #fff;
+    font-weight: 700;
+    font-size: 2.8rem;
+    margin-bottom: 35px;
+    user-select: none;
+    text-shadow: 1px 1px 6px rgba(0,0,0,0.4);
+  }
+  form {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 32px;
+  }
+  input[type="text"] {
+    flex-grow: 1;
+    padding: 16px 20px;
+    border-radius: 30px;
+    border: 2px solid #ff6b6b;
+    background: rgba(255 255 255 / 0.3);
+    color: white;
+    font-size: 1.2rem;
+    outline: none;
+    transition: border-color 0.3s, background-color 0.3s;
+  }
+  input[type="text"]::placeholder {
+    color: #ffc1c1;
+  }
+  input[type="text"]:focus {
+    background: rgba(255 255 255 / 0.5);
+    border-color: #ff4757;
+  }
+  button.submit {
+    padding: 16px 48px;
+    border-radius: 36px;
+    border: none;
+    background-color: #ff6b6b;
+    color: white;
+    font-weight: 700;
+    font-size: 1.2rem;
+    cursor: pointer;
+    box-shadow: 0 8px 22px rgba(255, 107, 107, 0.6);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    user-select: none;
+  }
+  button.submit:hover,
+  button.submit:focus {
+    background-color: #ff3e3e;
+    box-shadow: 0 14px 40px rgba(255, 62, 62, 0.8);
+    outline: none;
+  }
+  .response {
+    background: rgba(255 255 255 / 0.85);
+    color: #1d1d1d;
+    border-radius: 15px;
+    padding: 30px 24px;
+    font-size: 1.05rem;
+    line-height: 1.5;
+    max-height: 320px;
+    overflow-y: auto;
+    box-shadow: inset 0 1px 4px rgb(0 0 0 / 0.06);
+    white-space: pre-line;
+    user-select: text;
+  }
+
+</style>
 </head>
 <body>
 
-    <h1>AI-Doctor</h1>
+<nav class="navbar" role="navigation" aria-label="Main navigation">
+  <div class="brand" aria-label="Suraksha Hospital Home">Suraksha Hospital</div>
+  <div class="hamburger" id="hamburger" aria-label="Toggle menu" tabindex="0"><i class="fa fa-bars"></i></div>
+  <div class="nav-links" id="navLinks">
+    <a href="/" tabindex="0">Home</a>
+    <a href="/signin" tabindex="0">Sign In</a>
+  </div>
+</nav>
 
-    <form method="POST" action="/aidoctor">
-<!--        <label for="inputai">AI-DOCTOR:</label>-->
-        <input type="text" name="inputai" id="inputai" placeholder="HOW CAN I HELP YOU" required>
-        <button class="submit" type="submit">Submit</button>
-    </form>
+<main role="main" aria-label="AI Doctor page">
+  <h1>AI Doctor</h1>
+  <form method="POST" action="/aidoctor" aria-label="AI doctor query form">
+    <input
+      type="text"
+      id="inputai"
+      name="inputai"
+      placeholder="How can I help you?"
+      required
+      autocomplete="off"
+      aria-required="true"
+    />
+    <button type="submit" class="submit">Submit</button>
+  </form>
 
+  {% if full_response %}
+    <section class="response" role="region" aria-live="polite" tabindex="0">{{ full_response }}</section>
+  {% endif %}
+  {% if res %}
+    <section class="response" role="region" aria-live="polite" tabindex="0">{{ res }}</section>
+  {% endif %}
+</main>
 
-    <p class="response">{{full_response}}</p>
-    <p class="response">{{res}}</p>
-
-
-
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const navLinks = document.getElementById('navLinks');
+  hamburger.addEventListener('click', () => {
+    navLinks.classList.toggle('open');
+  });
+  hamburger.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      navLinks.classList.toggle('open');
+    }
+  });
+</script>
 
 </body>
 </html>
