@@ -167,12 +167,12 @@ def signin_submit():
                 password=os.getenv("DB_PASSWORD")
             )
             mycursor = mydb.cursor()
-            mycursor.execute("SELECT * FROM userlogin WHERE email = %s AND password = %s", (username, password))
+            mycursor.execute("SELECT * FROM userlogin WHERE email = %s AND password = %s", (email, password))
             row = mycursor.fetchone()
             mycursor.close()
             mydb.close()
             if row is None:
-                re = "Username or password did not match. Please try again!"
+                re = "Email or password did not match. Please try again!"
                 return render_template('signin.html', re=re)
             else:
                 return redirect(url_for('userhome'))
@@ -846,6 +846,7 @@ if __name__ == "__main__":
 
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
