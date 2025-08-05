@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Suraksha Hospital | Sign In / Sign Up</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <style>
       html, body {
           height: 100%;
@@ -227,32 +227,48 @@
       @media (max-width: 950px) {
           .main-container { max-width: 99vw; }
       }
+
+      /* Updated mobile styles */
       @media (max-width: 700px) {
           .main-container {
               flex-direction: column;
-              min-height: 99vh;
-              max-height: unset;
-              height: auto;
+              min-height: auto !important;
+              max-height: none !important;
+              height: auto !important;
           }
           .info-section {
               width: 100% !important;
               padding: 40px 16px;
-              min-height: unset;
-              height: 200px;
+              min-height: auto;
+              height: auto;
           }
           .slider-wrapper {
               width: 100% !important;
               min-width: 100%;
-              height: 390px;
-              min-height: 390px;
+              height: auto !important;
+              min-height: auto !important;
+              overflow: visible !important;
+              box-shadow: none;
+              position: relative !important;
           }
+          /* Panels: remove absolute positioning and transform on mobile */
           .panel, .panel-signin, .panel-signup {
+              position: relative !important;
               min-width: 100%;
               width: 100% !important;
               max-width: 100vw;
-              min-height: 390px;
-              padding: 26px 8px 14px 8px;
-              position: absolute !important;
+              min-height: auto !important;
+              height: auto !important;
+              padding: 26px 16px 14px 16px;
+              transform: none !important;
+              opacity: 1 !important;
+              z-index: auto !important;
+              transition: none !important;
+              overflow-y: visible !important;
+              display: none;
+          }
+          .panel.active {
+              display: block;
           }
       }
   </style>
@@ -261,12 +277,12 @@
   <div class="main-container" id="mainContainer">
       <!-- Left Info Section -->
       <div class="info-section d-none d-md-flex flex-column justify-content-center align-items-center">
-          <img src="https://content.jdmagicbox.com//comp/warangal/s3/9999px870.x870.191112205647.e8s3/menu/suraksha-multi-speciality-hospital-critical-care-trauma-care-and-peadiatric-center-warangal-hospitals-52sw9b5.jpg" width="64" alt="Suraksha Hospital" class="mb-3" style="filter: drop-shadow(0 2px 8px #0bb4f372)">
+          <img src="https://content.jdmagicbox.com//comp/warangal/s3/9999px870.x870.191112205647.e8s3/menu/suraksha-multi-speciality-hospital-critical-care-trauma-care-and-peadiatric-center-warangal-hospitals-52sw9b5.jpg" width="64" alt="Suraksha Hospital" class="mb-3" style="filter: drop-shadow(0 2px 8px #0bb4f372)" />
           <h2>Suraksha Hospital</h2>
           <p>
-            Excellence in Healthcare.<br>
-            Book appointments, access top doctors, instant updates,<br>
-            and compassionate care at your fingertips.<br>
+            Excellence in Healthcare.<br />
+            Book appointments, access top doctors, instant updates,<br />
+            and compassionate care at your fingertips.<br />
             Start your health journey with us!
           </p>
           <div class="switch-btn-group">
@@ -277,15 +293,15 @@
       <!-- SLIDER with panels -->
       <div class="slider-wrapper">
         <!-- Sign In Panel -->
-        <div class="panel panel-signin" id="panelSignin">
+        <div class="panel panel-signin active" id="panelSignin">
             <form action="/signin_submit" method="POST" autocomplete="off">
                 <div class="form-title mb-4">Sign In</div>
-                <input type="text" class="form-input" id="signin-username" name="email" placeholder="Email" required>
+                <input type="text" class="form-input" id="signin-username" name="email" placeholder="Email" required />
                 <div class="input-password-container mb-4">
-                    <input type="password" class="form-input" id="signin-password" name="password" placeholder="Password" required>
+                    <input type="password" class="form-input" id="signin-password" name="password" placeholder="Password" required />
                     <span class="toggle-password" onclick="togglePasswordVisibility('signin-password', this)">👁️</span>
                 </div>
-                <input type="submit" class="form-submit-btn" value="Login">
+                <input type="submit" class="form-submit-btn" value="Login" />
                 <div class="response">{{ re }}</div>
                 <div class="form-footer">
                     New user? <a href="javascript:void(0);" id="gotoSignup">Create an account →</a>
@@ -299,14 +315,14 @@
         <div class="panel panel-signup" id="panelSignup">
             <form action="/signup_submit" method="POST" autocomplete="off">
                 <div class="form-title mb-4">Sign Up</div>
-                <input type="text" class="form-input" id="signup-username" name="username" placeholder="Full Name" required>
-                <input type="text" class="form-input" id="signup-email" name="email" placeholder="Email" required>
-                <input type="text" class="form-input" id="phonenumber" name="phonenumber" placeholder="Contact" required>
+                <input type="text" class="form-input" id="signup-username" name="username" placeholder="Full Name" required />
+                <input type="text" class="form-input" id="signup-email" name="email" placeholder="Email" required />
+                <input type="text" class="form-input" id="phonenumber" name="phonenumber" placeholder="Contact" required />
                 <div class="input-password-container mb-4">
-                    <input type="password" class="form-input" id="signup-password" name="password" placeholder="Password" required>
+                    <input type="password" class="form-input" id="signup-password" name="password" placeholder="Password" required />
                     <span class="toggle-password" onclick="togglePasswordVisibility('signup-password', this)">👁️</span>
                 </div>
-                <input type="submit" class="form-submit-btn" value="Register">
+                <input type="submit" class="form-submit-btn" value="Register" />
                 <div class="response">{{ re }}</div>
                 <div class="form-footer">
                     Already have an account? <a href="javascript:void(0);" id="gotoSignin">Sign in →</a>
@@ -328,18 +344,33 @@
       document.getElementById('gotoSignin').onclick = () => showSignin();
 
       function showSignin() {
-          signinPanel.classList.remove('not-active');
-          signinPanel.classList.add('panel-signin');
           signinPanel.classList.add('active');
           signupPanel.classList.remove('active');
-          signinPanel.focus();
+
+          // Adjust classes for desktop sliding effect
+          signinPanel.classList.remove('not-active');
+          signinPanel.classList.add('panel-signin');
+          signinPanel.classList.remove('not-active');
+
+          signupPanel.classList.remove('active');
+          // Reset transforms in case on desktop
+          signinPanel.style.transform = '';
+          signupPanel.style.transform = '';
       }
       function showSignup() {
           signupPanel.classList.add('active');
+          signinPanel.classList.remove('active');
+
+          // Adjust classes for desktop sliding effect
           signinPanel.classList.add('not-active');
           signinPanel.classList.remove('active');
-          signupPanel.focus();
+
+          signupPanel.classList.add('active');
+          // Reset transforms in case on desktop
+          signinPanel.style.transform = '';
+          signupPanel.style.transform = '';
       }
+
       // Password toggle
       function togglePasswordVisibility(inputId, eyeIcon) {
           const input = document.getElementById(inputId);
