@@ -818,23 +818,23 @@ def doctoravailability():
             mycursor = mydb.cursor()
             query = "SELECT * FROM doctoravail WHERE doctor_specialization = %s"
             mycursor.execute(query, (doctor_specialization,))
-            data = mycursor.fetchall()
+            doctors = mycursor.fetchall()
             mycursor.close()
             mydb.close()
-            print("Fetched Data:", data)
 
-            if not data:
+            if not doctors:
                 message = "No doctor appointed for your necessity"
-                return render_template('doctor_availability.html', data=message)
+                return render_template('doctor_availability.html', doctors=[], message=message)
 
-            return render_template('doctor_availability.html', data=data)
+            return render_template('doctor_availability.html', doctors=doctors, message=None)
 
         except Exception as e:
             print("Database Error:", str(e))
             message = f"Error fetching doctor availability: {str(e)}"
-            return render_template('doctor_availability.html', data=message)
+            return render_template('doctor_availability.html', doctors=[], message=message)
 
-    return render_template('doctor_availability.html', data=None)
+    return render_template('doctor_availability.html', doctors=None, message=None)
+
 
 
 if __name__ == "__main__":
@@ -843,6 +843,7 @@ if __name__ == "__main__":
 
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
