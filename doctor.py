@@ -4,6 +4,7 @@ import psycopg2
 import random
 import os
 import pandas as pd
+from functools import wraps
 
 app = Flask(__name__)
 mydb = psycopg2.connect(
@@ -15,6 +16,14 @@ mydb = psycopg2.connect(
 )
 mycursor = mydb.cursor()
 app.secret_key = 'sri@vatsav*40'
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'username' not in session:
+            flash("Please login to access this page.", "warning")
+            return redirect(url_for('signin'))
+        return f(*args, **kwargs)
+    return decorated_function
 
 
 def create_table():
@@ -131,6 +140,7 @@ def signup():
 
 
 @app.route('/userhome', methods=["POST", "GET"])
+@login_required
 def userhome():
     return render_template('userhome.html')
 
@@ -215,6 +225,7 @@ def gosignup():
 
 
 @app.route('/appointmentbook', methods=["POST", "GET"])
+@login_required
 def appointmentbook():
     return render_template('appointment.html')
 
@@ -279,6 +290,7 @@ os.environ["REPLICATE_API_TOKEN"] = "r8_Ilv08PRu9QLAUlCwoWJPIofqABWM4Nu3K1m1D"
 
 
 @app.route("/aidoctor", methods=["POST", "GET"])
+
 def aidoc():
     if request.method == 'POST':
         try:
@@ -308,6 +320,7 @@ def aidoc():
 
 
 @app.route('/bookappointment', methods=["POST", "GET"])
+@login_required
 def bookappointment():
     try:
         if request.method == "POST":
@@ -357,6 +370,7 @@ def bookappointment():
 
 
 @app.route('/cancel')
+@login_required
 def cancel():
     try:
         mydb = psycopg2.connect(
@@ -397,6 +411,7 @@ def cancel():
 
 
 @app.route('/edit', methods=['GET', 'POST'])
+@login_required
 def edit():
     try:
         mydb = psycopg2.connect(
@@ -467,6 +482,7 @@ def edit():
 
 
 @app.route('/cancelappointment', methods=['POST', 'GET'])
+@login_required
 def cancelappointment():
     try:
         mydb = psycopg2.connect(
@@ -508,6 +524,7 @@ def cancelappointment():
 
 
 @app.route('/confirmcancel', methods=['POST'])
+@login_required
 def confirmcancel():
     try:
         mydb = psycopg2.connect(
@@ -826,4 +843,5 @@ if __name__ == "__main__":
 
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
+
 
