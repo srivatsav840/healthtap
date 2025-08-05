@@ -9,6 +9,15 @@
     rel="stylesheet"
   />
   <style>
+    /* Prevent horizontal overflow */
+    html, body {
+      width: 100vw;
+      max-width: 100vw;
+      overflow-x: hidden;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: #f8fafc;
@@ -18,14 +27,44 @@
     .navbar {
       background: #0866c6;
       box-shadow: 0 2px 8px rgba(30, 113, 183, 0.07);
+      padding-left: 10px;
+      padding-right: 10px;
     }
     .navbar-brand {
-      font-size: 1.8em;
       font-weight: bold;
       color: #fff !important;
       letter-spacing: 1px;
       user-select: none;
+      word-break: break-word;
+      white-space: normal;
+      width: 100%;
+      line-height: 1.05;
+      font-size: 1.8em;
     }
+    /* Responsive brand and subtitle font size and wrapping */
+    .navbar-brand .subtitle {
+      font-size: 0.9em;
+      font-weight: 300;
+      color: #ddeaff;
+      letter-spacing: 0.1em;
+      user-select: none;
+      margin-top: 2px;
+      word-break: break-word;
+      white-space: normal;
+      width: 100%;
+      display: block;
+    }
+    /* Smaller screens brand adjustments */
+    @media (max-width: 500px) {
+      .navbar-brand {
+        font-size: 1.2em;
+        line-height: 1.07;
+      }
+      .navbar-brand .subtitle {
+        font-size: 0.78em;
+      }
+    }
+
     .navbar-nav .nav-link {
       color: #f9f9f9 !important;
       font-weight: 500;
@@ -37,14 +76,7 @@
     .navbar-nav .nav-link.active {
       color: #ffe04a !important;
     }
-    .navbar-brand .subtitle {
-      font-size: 0.9em;
-      font-weight: 300;
-      color: #ddeaff;
-      letter-spacing: 0.1em;
-      user-select: none;
-      margin-top: 2px;
-    }
+
     /* Login/Register button styles */
     .navbar-buttons .btn {
       border-radius: 25px;
@@ -79,6 +111,8 @@
       padding: 70px 15px 60px 15px;
       position: relative;
       user-select: none;
+      width: 100vw;
+      box-sizing: border-box;
     }
     .hero-title {
       color: #fff;
@@ -177,6 +211,8 @@
       padding: 45px 10px 30px 10px;
       background: linear-gradient(90deg, #f8fafc 41%, #daf0fe 120%);
       user-select: none;
+      width: 100vw;
+      box-sizing: border-box;
     }
     .cta-buttons {
       display: flex;
@@ -247,7 +283,8 @@
       .hero-title {
         font-size: 2rem;
       }
-      .section, .hero-section {
+      .section,
+      .hero-section {
         padding-left: 15px;
         padding-right: 15px;
         text-align: center;
@@ -286,6 +323,103 @@
         min-width: unset;
       }
     }
+
+    /* Better hero background on small screens */
+    @media (max-width: 767px) {
+      .hero-section {
+        background: linear-gradient(180deg, #0866c6 0%, #3391ff 70%);
+        padding-top: 50px;
+        padding-bottom: 30px;
+        text-align: center;
+      }
+      .hero-title {
+        font-size: 1.8rem !important;
+      }
+      .hero-desc {
+        max-width: 100% !important;
+        color: #d5e8ff !important;
+      }
+      .hero-buttons {
+        flex-direction: column !important;
+        gap: 12px;
+      }
+      .hero-buttons .btn {
+        width: 100% !important;
+        max-width: 260px;
+        margin: 0 auto !important;
+      }
+      .hero-img {
+        max-width: 90vw !important;
+        margin: 24px auto 0 auto !important;
+        display: block !important;
+        filter: drop-shadow(0 8px 16px rgba(15, 67, 105, 0.3)) !important;
+      }
+    }
+
+    /* Benefit cards full width on very small screens */
+    @media (max-width: 480px) {
+      .benefit-card {
+        width: 100% !important;
+        box-sizing: border-box;
+      }
+    }
+
+    /* Navbar toggler background for better visibility on mobile */
+    .navbar-toggler {
+      border: none;
+      background-color: #d9e9ff !important;
+    }
+    .navbar-toggler-icon {
+      filter: invert(33%) sepia(71%) saturate(1151%) hue-rotate(183deg)
+        brightness(88%) contrast(85%);
+    }
+
+    /* Navbar collapse center alignment on small screens */
+    @media (max-width: 991px) {
+      .navbar-collapse {
+        justify-content: center !important;
+      }
+      .navbar-buttons {
+        justify-content: center !important;
+      }
+      .navbar-buttons .btn {
+        margin-left: 6px !important;
+        margin-right: 6px !important;
+      }
+    }
+
+    /* Footer links center stacked on very narrow */
+    @media (max-width: 400px) {
+      .footer div.mt-2 {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        font-size: 0.9em;
+      }
+      .footer div.mt-2 a {
+        margin: 0 !important;
+      }
+    }
+
+    /* Mobile full-width containers and fix horizontal scroll */
+    @media (max-width: 767.98px) {
+      .container {
+        max-width: 100vw !important;
+        width: 100vw !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+      }
+      .row {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+      }
+      .hero-section,
+      .section,
+      .cta-section {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -315,7 +449,7 @@
         </ul>
         <div class="navbar-buttons d-flex ms-lg-3">
           <a href="/signin" class="btn btn-login" tabindex="0" role="button">Login</a>
-          <a href="/signin" class="btn btn-register" tabindex="0" role="button">Register</a>
+          <a href="/signup" class="btn btn-register" tabindex="0" role="button">Register</a>
         </div>
       </div>
     </div>
@@ -341,7 +475,7 @@
               style="background: #fff; color: #0866c6; border: 1px solid #ddeaff"
               >Find Doctors</a
             >
-              <a
+            <a
               href="/medical"
               class="btn btn-outline-primary"
               tabindex="0"
@@ -349,7 +483,7 @@
               style="background: #fff; color: #0866c6; border: 1px solid #ddeaff"
               >Medicine</a
             >
-              <a
+            <a
               href="/admin"
               class="btn btn-outline-primary"
               tabindex="0"
@@ -427,7 +561,7 @@
         anytime!
       </p>
       <div class="cta-buttons">
-        <a href="/signin" class="btn me-2" tabindex="0" role="button">Rigister</a>
+        <a href="/signup" class="btn me-2" tabindex="0" role="button">Sign Up</a>
         <a
           href="/signin"
           class="btn btn-outline-primary"
@@ -452,5 +586,3 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-
-
