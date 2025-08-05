@@ -203,7 +203,7 @@ def signup_submit():
             mycursor.execute("SELECT email FROM userlogin WHERE email = %s", (email,))
             row = mycursor.fetchall()
             if not row:
-                sql = "INSERT INTO userlogin (userid,email, password, phonenumber) VALUES (%s, %s,%s,%s)"
+                sql = "INSERT INTO userlogin (username, email, password, phonenumber) VALUES (%s, %s,%s,%s)"
                 values = (user,email, pswd, phonenumber)
                 mycursor.execute(sql, values)
                 mydb.commit()
@@ -843,6 +843,7 @@ if __name__ == "__main__":
 
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
