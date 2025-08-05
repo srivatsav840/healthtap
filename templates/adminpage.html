@@ -1,129 +1,206 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Add Doctor Schedule</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: white;
-            color: #333;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            text-align: center;
-        }
-        form {
-            background-color: #ffffff;
-            padding: 20px 40px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            max-width: 700px;
-            width: 100%;
-        }
-        form h2 {
-            text-align: center;
-            color: #333;
-        }
-        label {
-            font-weight: bold;
-            color: #555;
-            margin-top: 10px;
-            display: block;
-        }
-        input[type="text"], select, input[type="submit"] {
-            width: 100%;
-            padding: 13px;
-            margin: 9px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        input[type="submit"] {
-            background-color: #5cb85c;
-            color: white;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        input[type="submit"]:hover {
-            background-color: green;
-        }
-        .day-labels {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 30px;
-        }
-        .day-labels div {
-            margin-bottom: 5px;
-        }
-        p {
-            font-size: 0.9em;
-            color: #888;
-            margin-top: -1px;
-        }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Admin - Add Doctor Schedule</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
+  body {
+    margin: 0;
+    padding: 40px 15px;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #0747a6 0%, #2a8bd9 100%);
+    color: #1e2a47;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+  }
+
+  form {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 16px 48px rgba(8,102,198,0.3);
+    padding: 36px 42px;
+    max-width: 700px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  form h2 {
+    color: #0747a6;
+    font-weight: 700;
+    font-size: 2rem;
+    margin-bottom: 32px;
+    text-align: center;
+    user-select: none;
+  }
+
+  label {
+    display: block;
+    font-weight: 600;
+    color: #2a4271;
+    margin-top: 18px;
+    margin-bottom: 6px;
+    user-select: text;
+  }
+
+  input[type="text"], select {
+    width: 100%;
+    padding: 14px 18px;
+    font-size: 1.1rem;
+    border-radius: 16px;
+    border: 1.8px solid #a9bddb;
+    background: #f9faff;
+    color: #22334a;
+    outline-offset: 3px;
+    transition: border-color 0.3s ease;
+    box-sizing: border-box;
+  }
+
+  input[type="text"]:focus, select:focus {
+    border-color: #2a4db7;
+    background: #eef4ff;
+    outline: none;
+  }
+
+  .note {
+    margin-top: 14px;
+    margin-bottom: 26px;
+    font-style: italic;
+    color: #5571b7;
+    text-align: center;
+    user-select: text;
+  }
+
+  .day-labels {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 24px 32px;
+  }
+
+  .day-labels label {
+    margin-top: 0;
+    margin-bottom: 5px;
+    color: #2a4271;
+  }
+
+  .day-labels input[type="text"] {
+    margin-top: 0;
+  }
+
+  input[type="submit"] {
+    margin-top: 40px;
+    width: 100%;
+    padding: 16px 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 36px;
+    background-color: #0747a6;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 14px 48px rgba(7, 71, 166, 0.6);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    user-select: none;
+  }
+  input[type="submit"]:hover, input[type="submit"]:focus {
+    background-color: #042f73;
+    box-shadow: 0 18px 58px rgba(4, 47, 115, 0.8);
+    outline: none;
+  }
+
+  /* Responsive Styles */
+  @media (max-width: 720px) {
+    form {
+      padding: 28px 24px;
+    }
+    .day-labels {
+      grid-template-columns: 1fr 1fr;
+      gap: 18px 24px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    form h2 {
+      font-size: 1.75rem;
+      margin-bottom: 26px;
+    }
+    label {
+      margin-top: 14px;
+      font-size: 1rem;
+    }
+    input[type="text"], select {
+      font-size: 1rem;
+      padding: 12px 16px;
+    }
+    input[type="submit"] {
+      font-size: 1.1rem;
+      padding: 14px 0;
+    }
+    .note {
+      font-size: 0.9rem;
+      margin-bottom: 20px;
+    }
+  }
+</style>
 </head>
 <body>
-    <form action="/add" method="POST">
-        <h2>Add Doctor Schedule</h2>
-        <label for="doctorname">Doctor Name</label>
-        <input type="text" id="doctorname" name="doctorname" placeholder="Enter doctor's name" required>
-        <label for="doctorid">Doctor ID</label>
-        <input type="text" id="doctorid" name="doctor_id" placeholder="Enter doctor's ID" required>
+<form action="/add" method="POST" autocomplete="off" aria-label="Add doctor schedule form">
+  <h2>Add Doctor Schedule</h2>
+  <label for="doctorname">Doctor Name</label>
+  <input type="text" id="doctorname" name="doctorname" placeholder="Enter doctor's name" required>
 
-        <label for="doctor">Doctor belongs to</label>
-        <select id="doctor" name="doctor" required>
-            <option value="" disabled selected>Select a department</option>
-            <option value="Neuro">Neuro</option>
-            <option value="ENT">ENT</option>
-            <option value="Cardio">Cardio</option>
-            <option value="Psychology">Psychology</option>
-            <!-- Add more departments as needed -->
-        </select>
-      <label for="Qualification">Qualification </label>
-       <input type="text" id="Qualification" name="doctor_qualification" placeholder="Enter doctor's Qualification" required>
+  <label for="doctorid">Doctor ID</label>
+  <input type="text" id="doctorid" name="doctor_id" placeholder="Enter doctor's ID" required>
 
-        <p>If not available on perticular day just mention " -- "</p>
+  <label for="doctor">Doctor belongs to</label>
+  <select id="doctor" name="doctor" required>
+    <option value="" disabled selected>Select a department</option>
+    <option value="Neuro">Neuro</option>
+    <option value="ENT">ENT</option>
+    <option value="Cardio">Cardio</option>
+    <option value="Psychology">Psychology</option>
+  </select>
 
-        <div class="day-labels">
-            <div>
-                <label for="monday">Monday</label>
-                <input type="text" id="monday" name="monday" placeholder="00AM:00PM">
-            </div>
-            <div>
-                <label for="tuesday">Tuesday</label>
-                <input type="text" id="tuesday" name="tuesday" placeholder="00AM:00PM"  >
-            </div>
-            <div>
-                <label for="wednesday">Wednesday</label>
-                <input type="text" id="wednesday" name="wednesday" placeholder="00AM:00PM" >
-            </div>
-            <div>
-                <label for="thursday">Thursday</label>
-                <input type="text" id="thursday" name="thursday" placeholder="00AM:00PM" >
-            </div>
-            <div>
-                <label for="friday">Friday</label>
-                <input type="text" id="friday" name="friday" placeholder="00AM:00PM" >
-            </div>
-            <div>
-                <label for="saturday">Saturday</label>
-                <input type="text" id="saturday" name="saturday" placeholder="00AM:00PM" >
-            </div>
-            <div>
-                <label for="sunday">Sunday</label>
-                <input type="text" id="sunday" name="sunday" placeholder="00AM:00PM" >
-            </div>
-        </div>
+  <label for="Qualification">Qualification</label>
+  <input type="text" id="Qualification" name="Qualification" placeholder="Enter doctor's Qualification" required>
 
-        <input type="submit" value="ADD+">
-    </form>
+  <p class="note">If not available on particular day, just mention " -- "</p>
+
+  <div class="day-labels">
+    <div>
+      <label for="monday">Monday</label>
+      <input type="text" id="monday" name="monday" placeholder="00AM:00PM">
+    </div>
+    <div>
+      <label for="tuesday">Tuesday</label>
+      <input type="text" id="tuesday" name="tuesday" placeholder="00AM:00PM" >
+    </div>
+    <div>
+      <label for="wednesday">Wednesday</label>
+      <input type="text" id="wednesday" name="wednesday" placeholder="00AM:00PM" >
+    </div>
+    <div>
+      <label for="thursday">Thursday</label>
+      <input type="text" id="thursday" name="thursday" placeholder="00AM:00PM" >
+    </div>
+    <div>
+      <label for="friday">Friday</label>
+      <input type="text" id="friday" name="friday" placeholder="00AM:00PM" >
+    </div>
+    <div>
+      <label for="saturday">Saturday</label>
+      <input type="text" id="saturday" name="saturday" placeholder="00AM:00PM" >
+    </div>
+    <div>
+      <label for="sunday">Sunday</label>
+      <input type="text" id="sunday" name="sunday" placeholder="00AM:00PM" >
+    </div>
+  </div>
+
+  <input type="submit" value="ADD+">
+</form>
 </body>
 </html>
-
