@@ -1,203 +1,411 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Appointments</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f7f7f7;
-            color: #333;
-        }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Appointments | Suraksha Hospital</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+<style>
+  /* Reset & base */
+  *, *::before, *::after { box-sizing: border-box; }
+  body, html {
+    margin: 0; padding: 0;
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #0747a6 0%, #2a8bd9 100%);
+    color: #1a1a1a;
+  }
 
-        h1 {
-            color: #444;
-            text-align: center;
-            margin-top: 30px;
-        }
+  /* Navbar */
+  nav.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #0747a6;
+    padding: 0 30px;
+    height: 70px;
+    box-shadow: 0 4px 12px rgba(7, 71, 166, 0.3);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    user-select: none;
+  }
+  .navbar-brand {
+    color: #fff;
+    font-weight: 900;
+    font-size: 1.75rem;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+  }
+  .navbar-brand img {
+    height: 40px;
+    margin-right: 12px;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  }
+  .nav-links {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+  .nav-links a, .nav-links form button {
+    background: transparent;
+    border: none;
+    color: #ddeaff;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background-color 0.2s ease;
+  }
+  .nav-links a:hover, .nav-links form button:hover,
+  .nav-links a:focus, .nav-links form button:focus {
+    background-color: #0b52d4;
+    outline: none;
+    color: white;
+  }
+  .profile-icon {
+    font-size: 1.4rem;
+  }
+  /* Responsive hamburger */
+  .hamburger {
+    display: none;
+    font-size: 1.8rem;
+    color: #ddeaff;
+    cursor: pointer;
+    background: none;
+    border: none;
+  }
+  @media(max-width: 768px) {
+    .nav-links {
+      position: fixed;
+      top: 70px;
+      right: 0;
+      background: #0747a6;
+      flex-direction: column;
+      width: 220px;
+      height: calc(100vh - 70px);
+      padding: 20px 0;
+      gap: 12px;
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+      border-top-left-radius: 12px;
+      border-bottom-left-radius: 12px;
+      box-shadow: -6px 0 12px rgba(0,0,0,0.3);
+      z-index: 1100;
+    }
+    .nav-links.open {
+      transform: translateX(0);
+    }
+    .nav-links a, .nav-links form button {
+      width: 100%;
+      justify-content: flex-start;
+      padding-left: 20px;
+      font-size: 1.15rem;
+      border-radius: 0;
+    }
+    .hamburger {
+      display: block;
+    }
+  }
 
-        .appointment-card {
-            background-color: white;
-            margin: 20px auto;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            width: 80%;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
+  /* Page content */
+  main {
+    max-width: 900px;
+    background: rgba(255 255 255 / 0.9);
+    margin: 50px auto 60px auto;
+    padding: 32px 36px;
+    border-radius: 24px;
+    box-shadow: 0 20px 45px rgba(7,71,166,0.25);
+    color: #12357a;
+  }
+  h1 {
+    color: #0747a6;
+    font-weight: 700;
+    font-size: 2.8rem;
+    margin-bottom: 28px;
+    text-align: center;
+  }
+  /* Search Form */
+  form.search-form {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    flex-wrap: wrap;
+    margin-bottom: 36px;
+  }
+  form.search-form input[type="text"] {
+    flex-grow: 1;
+    max-width: 320px;
+    padding: 14px 18px;
+    border-radius: 30px;
+    border: 2px solid #ddeaff;
+    font-size: 1rem;
+    outline-color: #0747a6;
+  }
+  form.search-form input[type="text"]::placeholder {
+    color: #9bb8fd;
+  }
+  form.search-form input[type="text"]:focus {
+    border-color: #0747a6;
+    background-color: #e3ecff;
+    outline: none;
+  }
+  form.search-form input[type="submit"] {
+    background-color: #0747a6;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 14px 32px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    cursor: pointer;
+    box-shadow: 0 12px 38px rgba(7,71,166,0.4);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  form.search-form input[type="submit"]:hover,
+  form.search-form input[type="submit"]:focus {
+    background-color: #042f73;
+    box-shadow: 0 16px 48px rgba(4,47,115,0.65);
+    outline: none;
+  }
 
-        .appointment-card h2 {
-            margin: 0 0 10px;
-            color: #4CAF50;
-        }
+  /* Appointment Card */
+  .appointment-card {
+    background: #f9fbff;
+    border-radius: 20px;
+    box-shadow: 0 12px 38px rgba(7,71,166,0.16);
+    padding: 28px 26px;
+    margin-bottom: 28px;
+    transition: box-shadow 0.3s ease;
+  }
+  .appointment-card:hover {
+    box-shadow: 0 18px 58px rgba(7,71,166,0.28);
+  }
+  .appointment-card h2 {
+    color: #0747a6;
+    font-weight: 700;
+    font-size: 1.7rem;
+    margin-bottom: 14px;
+  }
+  .appointment-details p {
+    font-size: 1.1rem;
+    margin: 6px 0;
+    color: #455a85;
+  }
 
-        .appointment-details {
-            margin: 10px 0;
-        }
+  /* Action buttons */
+  .appointment-actions {
+    margin-top: 16px;
+    text-align: right;
+  }
+  .appointment-actions form {
+    display: inline-block;
+    margin-left: 14px;
+  }
+  .appointment-actions button {
+    font-weight: 700;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: background-color 0.3s ease;
+  }
+  .update-button {
+    background-color: #0747a6;
+    color: white;
+    box-shadow: 0 10px 30px rgba(7,71,166,0.4);
+  }
+  .update-button:hover, .update-button:focus {
+    background-color: #042f73;
+    box-shadow: 0 14px 42px rgba(4,47,115,0.65);
+    outline: none;
+  }
+  .delete-button {
+    background-color: #ca3648;
+    color: white;
+    box-shadow: 0 10px 30px rgba(202,54,72,0.5);
+  }
+  .delete-button:hover, .delete-button:focus {
+    background-color: #a52a3a;
+    box-shadow: 0 14px 42px rgba(165,42,58,0.7);
+    outline: none;
+  }
 
-        .appointment-actions {
-            text-align: right;
-        }
+  /* No tasks */
+  .no-tasks {
+    font-size: 1.2rem;
+    color: #7a8ab8;
+    text-align: center;
+    margin: 40px 0;
+    user-select: none;
+  }
 
-        .appointment-actions form {
-            display: inline-block;
-        }
+  /* Back link */
+  .back-link {
+    display: block;
+    width: fit-content;
+    margin: 30px auto 0 auto;
+    font-weight: 600;
+    font-size: 1.15rem;
+    color: #ddeaff;
+    background: #0747a6;
+    padding: 8px 20px;
+    border-radius: 25px;
+    box-shadow: 0 14px 40px rgba(7,71,166,0.5);
+    text-decoration: none;
+    user-select: none;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .back-link:hover,
+  .back-link:focus {
+    background-color: #042f73;
+    box-shadow: 0 18px 48px rgba(4,47,115,0.7);
+    outline: none;
+    text-decoration: none;
+  }
 
-        .appointment-actions button {
-            margin: 0 5px;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-        }
+  /* Flash messages */
+  .flash-message {
+    max-width: 760px;
+    margin: 20px auto;
+    padding: 14px 28px;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 1rem;
+    text-align: center;
+    user-select: none;
+  }
 
-        .update-button {
-            background-color: #4CAF50;
-            color: white;
-        }
+  .flash-success {
+    background-color: #4CAF50;
+    color: white;
+  }
+  .flash-error {
+    background-color: #f44336;
+    color: white;
+  }
 
-        .delete-button {
-            background-color: #f44336;
-            color: white;
-        }
-
-        .update-button:hover {
-            background-color: #45a049;
-        }
-
-        .delete-button:hover {
-            background-color: #d32f2f;
-        }
-
-        .no-tasks {
-            text-align: center;
-            margin: 20px;
-            color: #777;
-        }
-
-        form {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        input[type="text"], input[type="submit"] {
-            padding: 10px;
-            margin: 5px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-            font-size: 14px;
-        }
-
-        input[type="submit"] {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        input[type="submit"]:hover {
-            background-color: green;
-        }
-
-        .flash-message {
-            width: 80%;
-            margin: 20px auto;
-            padding: 10px;
-            border-radius: 5px;
-            text-align: center;
-            font-size: 14px;
-            position: fixed; /* Fixes the message at the top */
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1000; /* Ensure it is above other content */
-        }
-
-        .flash-success {
-            background-color: #4CAF50;
-            color: white;
-        }
-
-        .flash-error {
-            background-color: #f44336;
-            color: white;
-        }
-
-        a {
-            display: block;
-            text-align: center;
-            margin-top: 20px;
-            text-decoration: none;
-            color: #333;
-            font-size: 16px;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-    </style>
+  /* Responsive */
+  @media (max-width: 720px){
+    main {
+      margin: 20px 10px 50px 10px;
+      padding: 16px;
+      border-radius: 20px;
+    }
+    form.search-form {
+      flex-wrap: wrap;
+    }
+    form.search-form input[type="text"] {
+      max-width: 100%;
+      margin-bottom: 14px;
+    }
+    form.search-form input[type="submit"] {
+      padding: 12px 0;
+      width: 100%;
+    }
+    .appointment-actions button {
+      font-size: 0.9rem;
+      padding: 8px 18px;
+    }
+    .appointment-actions form {
+      margin-left: 10px;
+    }
+    .back-link {
+      width: 90vw;
+      font-size: 1.1rem;
+      padding: 14px 0;
+      margin-top: 36px;
+    }
+  }
+</style>
 </head>
 <body>
-    {% with messages = get_flashed_messages(with_categories=true) %}
+  <nav class="navbar" role="navigation" aria-label="Primary Navigation">
+    <a href="/userhome" class="navbar-brand" aria-label="Suraksha Hospital Home">
+      <img src="https://img.icons8.com/ios-filled/50/ffffff/hospital-3.png" alt="Hospital Logo" />
+      Suraksha Hospital
+    </a>
+    <button class="hamburger" aria-label="Toggle menu" aria-expanded="false" aria-controls="primary-navigation" id="hamburgerBtn">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="nav-links" id="primary-navigation">
+      <a href="/userhome" tabindex="0"><i class="fas fa-house"></i> Home</a>
+      <a href="/medico" tabindex="0"><i class="fas fa-pills"></i> Medicine</a>
+      <a href="/aidoctor" tabindex="0"><i class="fas fa-robot"></i> AI Doctor</a>
+      <a href="/profile" tabindex="0"><i class="fas fa-user-circle"></i> Profile</a>
+      <form action="/logout" method="POST" style="margin:0;">
+        <button type="submit" tabindex="0"><i class="fas fa-sign-out-alt"></i> Logout</button>
+      </form>
+    </div>
+  </nav>
+  <main role="main" aria-label="Appointments list">
+    <div class="container">
+      {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
-            {% for category, message in messages %}
-                <div class="flash-message flash-{{ category }}">
-                    {{ message }}
-                </div>
-            {% endfor %}
+          {% for category, message in messages %}
+            <div class="flash-message flash-{{ category }}">{{ message }}</div>
+          {% endfor %}
         {% endif %}
-    {% endwith %}
-
-    <h1>Appointments</h1>
-    <form action="/cancel" method="GET">
-        <input type="text" id="search" name="search" placeholder="Search appointments...">
-        <input type="submit" value="Search">
-    </form>
-    {% if data %}
+      {% endwith %}
+      <h1>Appointments</h1>
+      <form class="search-form" action="/cancel" method="GET" role="search" aria-label="Search appointments">
+        <input type="text" id="search" name="search" placeholder="Search appointments..." />
+        <input type="submit" value="Search" />
+      </form>
+      {% if data %}
         {% for task in data %}
-            <div class="appointment-card">
-                <h2>Appointment ID: {{ task[0] }}</h2>
-                <div class="appointment-details">
-                    <p><strong>Patient Name:</strong> {{ task[1] }}</p>
-                    <p><strong>Age:</strong> {{ task[2] }}</p>
-                    <p><strong>DateTime:</strong> {{ task[3] }}</p>
-                    <p><strong>Doctor:</strong> {{ task[4] }}</p>
-                    <p><strong>Contact:</strong> {{ task[5] }}</p>
-                </div>
-                <div class="appointment-actions">
-                    <form action="/edit" method="GET">
-                        <input type="hidden" name="id" value="{{ task[0] }}">
-                        <button class="update-button" type="submit">Reschedule</button>
-                    </form>
-                    <form action="/confirmcancel" method="POST" onsubmit="return confirmCancel();">
-                        <input type="hidden" name="task" value="{{ task[0] }}">
-                        <button class="delete-button" type="submit">Cancel</button>
-                    </form>
-                </div>
+          <div class="appointment-card" role="article" aria-labelledby="app-{{ loop.index }}-title">
+            <h2 id="app-{{ loop.index }}-title">Appointment ID: {{ task[0] }}</h2>
+            <div class="appointment-details">
+              <p><strong>Patient Name:</strong> {{ task[1] }}</p>
+              <p><strong>Age:</strong> {{ task[2] }}</p>
+              <p><strong>Date & Time:</strong> {{ task[3] }}</p>
+              <p><strong>Doctor:</strong> {{ task[4] }}</p>
+              <p><strong>Contact:</strong> {{ task[5] }}</p>
             </div>
+            <div class="appointment-actions">
+              <form action="/edit" method="GET" aria-label="Reschedule appointment {{ task[0] }}">
+                <input type="hidden" name="id" value="{{ task[0] }}">
+                <button class="update-button" type="submit">Reschedule</button>
+              </form>
+              <form action="/confirmcancel" method="POST" aria-label="Cancel appointment {{ task[0] }}" onsubmit="return confirmCancel();">
+                <input type="hidden" name="task" value="{{ task[0] }}">
+                <button class="delete-button" type="submit">Cancel</button>
+              </form>
+            </div>
+          </div>
         {% endfor %}
-    {% else %}
+      {% else %}
         <p class="no-tasks">No appointments available.</p>
-    {% endif %}
-
-    <a href="{{ url_for('userhome') }}">Back</a>
-
-    <script>
-        function confirmCancel() {
-            return confirm("Are you sure you want to cancel this appointment?");
-        }
-
-        document.getElementById('search').addEventListener('input', function() {
-            const searchQuery = this.value;
-            const form = document.querySelector('form');
-            form.action = `/cancel?search=${encodeURIComponent(searchQuery)}`;
-        });
-    </script>
+      {% endif %}
+    
+    </div>
+  </main>
+  <script>
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const navLinks = document.getElementById('primary-navigation');
+    hamburgerBtn.addEventListener('click', () => {
+      const expanded = hamburgerBtn.getAttribute('aria-expanded') === 'true';
+      hamburgerBtn.setAttribute('aria-expanded', !expanded);
+      navLinks.classList.toggle('open');
+    });
+    hamburgerBtn.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        hamburgerBtn.click();
+      }
+    });
+    function confirmCancel() {
+      return confirm("Are you sure you want to cancel this appointment?");
+    }
+  </script>
 </body>
 </html>
