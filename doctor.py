@@ -102,8 +102,8 @@ def create_table3():
             CREATE TABLE IF NOT EXISTS doctoravail (
                 doctor_name VARCHAR(50),
                 doctor_id VARCHAR(50),
-                qualification VARCHAR(50),
                 doctor_specialization VARCHAR(100),
+                doctor_qualification VARCHAR(50),
                 monday VARCHAR(20),
                 tuesday VARCHAR(20),
                 wednesday VARCHAR(20),
@@ -588,7 +588,7 @@ def show_doctors():
         mycursor = mydb.cursor()
         # PostgreSQL query syntax is the same here
         mycursor.execute("""
-            SELECT doctor_name, doctor_id, doctor_specialization, 
+            SELECT doctor_name, doctor_id, doctor_specialization,doctor_qualification, 
                    monday, tuesday, wednesday, thursday, 
                    friday, saturday, sunday 
             FROM doctoravail
@@ -616,6 +616,7 @@ def edit_doctor():
         doctor_id = request.form.get('doctor_id')
         doctorname = request.form.get('doctorname')
         doctor_specialization = request.form.get('doctor_specialization')
+        doctor_qualification = request.form.get('doctor_qualification')
         monday = request.form.get('monday')
         tuesday = request.form.get('tuesday')
         wednesday = request.form.get('wednesday')
@@ -636,13 +637,13 @@ def edit_doctor():
             # PostgreSQL-compatible update query
             query = """
                 UPDATE doctoravail
-                SET doctor_name = %s, doctor_specialization = %s, 
+                SET doctor_name = %s, doctor_specialization = %s,doctor_qualification=%s,
                     monday = %s, tuesday = %s, wednesday = %s, thursday = %s,
                     friday = %s, saturday = %s, sunday = %s
                 WHERE doctor_id = %s
             """
             values = (
-                doctorname, doctor_specialization, monday, tuesday, wednesday,
+                doctorname, doctor_specialization,doctor_qualification, monday, tuesday, wednesday,
                 thursday, friday, saturday, sunday, doctor_id
             )
             mycursor.execute(query, values)
@@ -675,7 +676,7 @@ def edit_doctor():
             )
             mycursor = mydb.cursor()
             query = """
-                SELECT doctor_name, doctor_id, doctor_specialization, 
+                SELECT doctor_name, doctor_id, doctor_specialization,doctor_qualification, 
                        monday, tuesday, wednesday, thursday, 
                        friday, saturday, sunday 
                 FROM doctoravail 
@@ -742,7 +743,7 @@ def doctor_details_add():
     if request.method == "POST":
         doctorid = request.form['doctor_id']
         doctorname = request.form['doctorname']
-        qualification = request.form['qualification']
+        doctor_qualification = request.form['doctor_qualification']
         doctor = request.form['doctor']
         monday = request.form['monday']
         tuesday = request.form['tuesday']
@@ -765,14 +766,14 @@ def doctor_details_add():
 
             query = """
                 INSERT INTO doctoravail (
-                    doctor_name, doctor_id,qualification,doctor_specialization,
+                    doctor_name, doctor_id,doctor_specialization,doctor_qualification,
                     monday, tuesday, wednesday, thursday, 
                     friday, saturday, sunday
-                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                ) VALUES (%s, %s, %s, %s,%s, %s, %s, %s, %s, %s, %s)
             """
 
             values = (
-                doctorname, doctorid, doctor, monday, tuesday,
+                doctorname, doctorid, doctor,doctor_qualification, monday, tuesday,
                 wednesday, thursday, friday, saturday, sunday
             )
 
@@ -845,6 +846,7 @@ if __name__ == "__main__":
 
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
