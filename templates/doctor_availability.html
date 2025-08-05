@@ -175,58 +175,35 @@
         <input type="submit" name="action" value="Search">
     </form>
 
-    {% if data %}
-        <div class="result">
-            {% if data == "No doctor appointed for your necessity" %}
-                <p class="no-result">{{ data }}</p>
-            {% else %}
-                {% for doctor in data %}
-                    <div class="doctor-card">
-                        <img class="doctor-image" src="doctor-image-placeholder.png" alt="Doctor Photo">
-                        <div class="doctor-details">
-                            <h3>Dr. {{ doctor[0] }}</h3>
-                            <div class="specialization">Specialization: {{ doctor[2] }}</div>
-                            <p style="margin-bottom:4px;"><b>Available Timings:</b></p>
-                            <table class="schedule-table">
-                                <tr>
-                                    <th>Day</th>
-                                    <th>Timing</th>
-                                </tr>
-                                <tr>
-                                    <td>Monday</td>
-                                    <td>{{ doctor[3] }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Tuesday</td>
-                                    <td>{{ doctor[4] }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Wednesday</td>
-                                    <td>{{ doctor[5] }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Thursday</td>
-                                    <td>{{ doctor[6] }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Friday</td>
-                                    <td>{{ doctor[7] }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Saturday</td>
-                                    <td>{{ doctor[8] }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Sunday</td>
-                                    <td>{{ doctor[9] }}</td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                {% endfor %}
-            {% endif %}
+    {% if message %}
+  <p class="no-result">{{ message }}</p>
+{% elif doctors %}
+  <div class="result">
+    {% for doctor in doctors %}
+      <div class="doctor-card">
+        <img class="doctor-image" src="doctor-image-placeholder.png" alt="Doctor Photo" />
+        <div class="doctor-details">
+          <h3>Dr. {{ doctor[0] }}</h3>
+          <div class="specialization">Specialization: {{ doctor[2] }}</div>
+          <p style="margin-bottom:4px;"><b>Available Timings:</b></p>
+          <table class="schedule-table">
+            <tr><th>Day</th><th>Timing</th></tr>
+            <tr><td>Monday</td><td>{{ doctor[3] }}</td></tr>
+            <tr><td>Tuesday</td><td>{{ doctor[4] }}</td></tr>
+            <tr><td>Wednesday</td><td>{{ doctor[5] }}</td></tr>
+            <tr><td>Thursday</td><td>{{ doctor[6] }}</td></tr>
+            <tr><td>Friday</td><td>{{ doctor[7] }}</td></tr>
+            <tr><td>Saturday</td><td>{{ doctor[8] }}</td></tr>
+            <tr><td>Sunday</td><td>{{ doctor[9] }}</td></tr>
+          </table>
         </div>
-    {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <p class="no-result">Please select a specialization and submit the form to see doctor availability.</p>
+{% endif %}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
