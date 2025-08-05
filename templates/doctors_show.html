@@ -1,201 +1,247 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Doctors Availability</title>
-    <style>
-        /* Global Styles */
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(to right, #6a11cb, #2575fc);
-            color: #333;
-            margin: 0;
-            padding: 0;
-        }
-        h3, p {
-            margin: 0;
-            padding: 5px 0;
-        }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Doctors Availability | Suraksha Hospital</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
-        /* Form Styles */
-        form {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 20px;
-        }
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #0866c6 0%, #2a8bd9 100%);
+    color: #1e2a47;
+    min-height: 100vh;
+    padding: 20px 15px;
+  }
 
-        form a,
-        form input[type="submit"] {
-            background-color: #007bff;
-            color: white;
-            padding: 10px 20px;
-            text-decoration: none;
-            border: none;
-            border-radius: 5px;
-            margin: 0 10px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
+  form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  form input[type="submit"], form a {
+    background-color: #0747a6;
+    color: #fff;
+    padding: 12px 28px;
+    border-radius: 28px;
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(7, 71, 166, 0.5);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    user-select: none;
+  }
+  form input[type="submit"]:hover, form a:hover,
+  form input[type="submit"]:focus, form a:focus {
+    background-color: #042f73;
+    box-shadow: 0 8px 26px rgba(4, 47, 115, 0.7);
+    outline: none;
+    text-decoration: none;
+  }
 
-        form a:hover,
-        form input[type="submit"]:hover {
-            background-color: #0056b3;
-        }
+  .ctrl {
+    color: #dce6ff;
+    font-size: 1.05rem;
+    text-align: center;
+    margin-bottom: 8px;
+    user-select: none;
+  }
 
-        /* Doctor Cards */
-        .result {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            padding: 20px;
-        }
+  .result {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 28px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
 
-        .doctor-card {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin: 20px;
-            width: 300px;
-            padding: 20px;
-            transition: transform 0.3s ease;
-        }
+  .doctor-card {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 14px 40px rgb(7 71 166 / 0.15);
+    padding: 22px 20px 30px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: box-shadow 0.25s ease;
+    user-select: none;
+  }
+  .doctor-card:hover {
+    box-shadow: 0 22px 58px rgb(7 71 166 / 0.28);
+  }
 
-        .doctor-card:hover {
-            transform: translateY(-10px);
-        }
+  /* Placeholder for doctor image */
+  .doctor-image {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #e1e8ff, #a0b8ff);
+    margin-bottom: 18px;
+    box-shadow: inset 3px 3px 6px #b9c6f8, inset -3px -3px 6px #dce7ff;
+  }
 
-        /* Schedule Table */
-        .schedule-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
+  .doctor-details {
+    width: 100%;
+    text-align: left;
+  }
 
-        .schedule-table th,
-        .schedule-table td {
-            padding: 10px;
-            text-align: center;
-            border: 1px solid #ddd;
-        }
+  .doctor-details h3 {
+    color: #0747a6;
+    font-weight: 700;
+    margin: 0 0 6px 0;
+    font-size: 1.3rem;
+    user-select: text;
+  }
+  .doctor-details p {
+    margin: 6px 0;
+    font-weight: 600;
+    color: #2f4c7a;
+    font-size: 1rem;
+  }
 
-        /* Button Styles */
-        .button-container {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 15px;
-        }
+  .schedule-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+  }
+  .schedule-table th, .schedule-table td {
+    border: 1px solid #d4dbe8;
+    padding: 8px 12px;
+    font-size: 0.95rem;
+    text-align: center;
+    color: #1e2a47;
+  }
+  .schedule-table th {
+    background-color: #e8f0ff;
+  }
 
-        .update-btn,
-        .remove-btn {
-            background-color: #28a745;
-            color: white;
-            padding: 8px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
+  .button-container {
+    margin-top: 14px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+  }
+  .update-btn, .remove-btn {
+    font-weight: 600;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    user-select: none;
+    transition: background-color 0.3s ease;
+  }
+  .update-btn {
+    background-color: #0747a6;
+    color: white;
+    box-shadow: 0 10px 30px rgba(7, 71, 166, 0.4);
+  }
+  .update-btn:hover, .update-btn:focus {
+    background-color: #042f73;
+    box-shadow: 0 14px 42px rgba(4, 47, 115, 0.65);
+    outline: none;
+  }
+  .remove-btn {
+    background-color: #ca3648;
+    color: white;
+    box-shadow: 0 10px 30px rgba(202, 54, 72, 0.5);
+  }
+  .remove-btn:hover, .remove-btn:focus {
+    background-color: #a52a3a;
+    box-shadow: 0 14px 42px rgba(165, 42, 58, 0.7);
+    outline: none;
+  }
 
-        .remove-btn {
-            background-color: #dc3545;
-        }
+  .no-result {
+    color: #ddeaff;
+    text-align: center;
+    font-size: 1.2rem;
+    margin-top: 56px;
+    user-select: none;
+  }
 
-        .update-btn:hover {
-            background-color: #218838;
-        }
-
-        .remove-btn:hover {
-            background-color: #c82333;
-        }
-
-        /* No Result Message */
-        .no-result {
-            color: white;
-            text-align: center;
-            font-size: 18px;
-            padding: 20px;
-        }
-        .ctrl{
-        text-align:center;
-        color:white;
-        }
-    </style>
-    <script>
-        function confirmRemoval() {
-            return confirm('Are you sure you want to remove this doctor?');
-        }
-    </script>
+  /* Responsive */
+  @media (max-width: 760px) {
+    .result {
+      grid-template-columns: 1fr;
+      padding: 0 15px;
+    }
+    form {
+      flex-direction: column;
+      gap: 14px;
+    }
+  }
+</style>
+<script>
+  function confirmRemoval() {
+    return confirm('Are you sure you want to remove this doctor?');
+  }
+</script>
 </head>
 <body>
-    <form action="/show_doctors" method="POST">
-        <input type="submit" id="show_doctors" name="action" value="Show Doctors">
-        <a href="/adminpage">New Entry</a>
-    </form>
-    <p class="ctrl">Use CTRL+F to search doctors</p>
-    {{dat}}
+  <form action="/show_doctors" method="POST" aria-label="Show Doctors and Add new doctor entry">
+    <input type="submit" id="show_doctors" name="action" value="Show Doctors" aria-label="Show Doctors" />
+    <a href="/adminpage" style="background:#0747a6;color:#fff;padding:10px 24px;border-radius:28px;text-decoration:none;font-weight:600;margin-left:12px;box-shadow:0 6px 20px rgba(7,71,166,0.6);user-select:none;">New Entry</a>
+  </form>
 
-    {% if data %}
-        <div class="result">
-            {% if data == "No doctor appointed for your necessity" %}
-                <p class="no-result">{{ data }}</p>
-            {% else %}
-                {% for doctor in data %}
-                    <div class="doctor-card">
-                        <h3>Doctor Name: {{ doctor[0] }}</h3>
-                        <p><strong>Doctor ID:</strong> {{ doctor[1] }}</p>
-                        <p><strong>Specialization:</strong> {{ doctor[2] }}</p>
+  <p class="ctrl">Use CTRL+F to search doctors</p>
+  {{ dat }}
 
-                        <p>Available Timings:</p>
-                        <table class="schedule-table">
-                            <tr>
-                                <th>Day</th>
-                                <th>Timing</th>
-                            </tr>
-                            <tr>
-                                <td>Monday</td>
-                                <td>{{ doctor[3] }}</td>
-                            </tr>
-                            <tr>
-                                <td>Tuesday</td>
-                                <td>{{ doctor[4] }}</td>
-                            </tr>
-                            <tr>
-                                <td>Wednesday</td>
-                                <td>{{ doctor[5] }}</td>
-                            </tr>
-                            <tr>
-                                <td>Thursday</td>
-                                <td>{{ doctor[6] }}</td>
-                            </tr>
-                            <tr>
-                                <td>Friday</td>
-                                <td>{{ doctor[7] }}</td>
-                            </tr>
-                            <tr>
-                                <td>Saturday</td>
-                                <td>{{ doctor[8] }}</td>
-                            </tr>
-                            <tr>
-                                <td>Sunday</td>
-                                <td>{{ doctor[9] }}</td>
-                            </tr>
-                        </table>
-                        <div class="button-container">
-                            <form action="/edit_doctor" method="GET">
-                                <input type="hidden" name="doctor_id" value="{{ doctor[1] }}">
-                                <button type="submit" class="update-btn">Update</button>
-                            </form>
-                            <form action="/remove_doctor" method="POST" onsubmit="return confirmRemoval();">
-                                <input type="hidden" name="doctor_id" value="{{ doctor[1] }}">
-                                <button type="submit" class="remove-btn">Remove</button>
-                            </form>
-                        </div>
-                    </div>
-                {% endfor %}
-            {% endif %}
+  {% if data %}
+  <div class="result" role="list">
+    {% if data == "No doctor appointed for your necessity" %}
+      <p class="no-result">{{ data }}</p>
+    {% else %}
+      {% for doctor in data %}
+      <article class="doctor-card" role="listitem">
+        <div class="doctor-image" aria-label="Doctor photo placeholder"></div>
+        <div class="doctor-details">
+          <h3>Doctor Name: {{ doctor[0] }}</h3>
+          <p><strong>Doctor ID:</strong> {{ doctor[1] }}</p>
+          <p><strong>Specialization:</strong> {{ doctor[2] }}</p>
+            <p><strong>Qualification:</strong> {{ doctor[3] }}</p>
+
+          <p><b>Available Timings:</b></p>
+          <table class="schedule-table" aria-label="Weekly schedule for doctor {{ doctor[0] }}">
+            <thead>
+              <tr>
+                <th>Day</th><th>Timing</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Monday</td><td>{{ doctor[4] }}</td></tr>
+              <tr><td>Tuesday</td><td>{{ doctor[5] }}</td></tr>
+              <tr><td>Wednesday</td><td>{{ doctor[6] }}</td></tr>
+              <tr><td>Thursday</td><td>{{ doctor[7] }}</td></tr>
+              <tr><td>Friday</td><td>{{ doctor[8] }}</td></tr>
+              <tr><td>Saturday</td><td>{{ doctor[9] }}</td></tr>
+              <tr><td>Sunday</td><td>{{ doctor[10] }}</td></tr>
+            </tbody>
+          </table>
+
+          <div class="button-container">
+            <form action="/edit_doctor" method="GET" aria-label="Update details for doctor {{ doctor[0] }}">
+              <input type="hidden" name="doctor_id" value="{{ doctor[1] }}">
+              <button type="submit" class="update-btn">Update</button>
+            </form>
+
+            <form action="/remove_doctor" method="POST" aria-label="Remove doctor {{ doctor[0] }}" onsubmit="return confirmRemoval();">
+              <input type="hidden" name="doctor_id" value="{{ doctor[1] }}">
+              <button type="submit" class="remove-btn">Remove</button>
+            </form>
+          </div>
         </div>
+      </article>
+      {% endfor %}
     {% endif %}
+  </div>
+  {% endif %}
 </body>
 </html>
