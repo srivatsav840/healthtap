@@ -14,13 +14,15 @@ app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USERNAME'] = 'bojjasrivatsav@gmail.com'
 app.config['MAIL_PASSWORD'] = 'pjrrkvdzzwmekird'
+app.config['MAIL_DEFAULT_SENDER'] = 'bojjasrivatsav@gmail.com'
 mail = Mail(app)
 
 def send_appointment_email(recipient_email, appointment_id, appointment_date):
     subject = f"Your appointment is scheduled for {appointment_date}"
     body = f"Thank you for booking. Your appointment ID is {appointment_id}."
-    msg = Message(subject, recipients=[recipient_email], body=body)
+    msg = Message(subject, sender='bojjasrivatsav@gmail.com', recipients=[recipient_email], body=body)
     mail.send(msg)
+
 
 
 mydb = psycopg2.connect(
@@ -865,6 +867,7 @@ if __name__ == "__main__":
 
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
