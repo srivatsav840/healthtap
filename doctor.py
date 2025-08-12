@@ -5,6 +5,20 @@ import random
 import os
 import pandas as pd
 from functools import wraps
+from flask_mail import Mail, Message
+
+app.config['MAIL_SERVER'] = 'smtp.example.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = 'bojjasrivatsav@gmail.com'
+app.config['MAIL_PASSWORD'] = 'Sri@vatsav840'
+mail = Mail(app)
+
+def send_appointment_email(recipient_email, appointment_id, appointment_date):
+    subject = f"Your appointment is scheduled for {appointment_date}"
+    body = f"Thank you for booking. Your appointment ID is {appointment_id}."
+    msg = Message(subject, recipients=[recipient_email], body=body)
+    mail.send(msg)
 
 app = Flask(__name__)
 mydb = psycopg2.connect(
@@ -359,7 +373,9 @@ def bookappointment():
                 mydb.commit()
                 mycursor.close()
                 mydb.close()
-                flash(f"Your appointment has been successfully booked. Your ID is {id}. Be there before time.",
+                recipient_email=username
+                send_appointment_email(recipient_email, id, datetime_val)
+                flash(f"Your appointment has been successfully booked. Your details shared via email. Be there before time.",
                       "success")
                 return redirect(url_for('bookappointment'))
 
@@ -846,6 +862,7 @@ if __name__ == "__main__":
 
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
