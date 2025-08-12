@@ -339,7 +339,7 @@
           {% endfor %}
         {% endif %}
       {% endwith %}
-      <form action="/bookappointment" method="POST">
+      <form action="/bookappointment" method="POST" novalidate>
         <label for="name">Patient Name</label>
         <input type="text" id="name" name="name" placeholder="Your full name" required />
 
@@ -385,6 +385,13 @@
   </main>
 
   <script>
+    document.querySelector("form").addEventListener("submit", function(event) {
+    if (!this.checkValidity()) {
+        event.preventDefault(); // Stop form submission
+        alert("Please fill in all required fields correctly");
+    }
+});
+
     const hamburgerBtn = document.getElementById('hamburgerBtn');
     const navLinks = document.getElementById('primary-navigation');
     hamburgerBtn.addEventListener('click', () => {
