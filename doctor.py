@@ -7,6 +7,8 @@ import pandas as pd
 from functools import wraps
 from flask_mail import Mail, Message
 
+app = Flask(__name__)
+
 app.config['MAIL_SERVER'] = 'smtp.example.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
@@ -20,7 +22,7 @@ def send_appointment_email(recipient_email, appointment_id, appointment_date):
     msg = Message(subject, recipients=[recipient_email], body=body)
     mail.send(msg)
 
-app = Flask(__name__)
+
 mydb = psycopg2.connect(
     host=os.getenv("DB_HOST"),
     port=os.getenv("DB_PORT"),
@@ -862,6 +864,7 @@ if __name__ == "__main__":
 
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
