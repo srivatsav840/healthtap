@@ -13,7 +13,7 @@ app.config['MAIL_SERVER'] = 'smtp.example.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USERNAME'] = 'bojjasrivatsav@gmail.com'
-app.config['MAIL_PASSWORD'] = 'pjrr kvdz zwme kird'
+app.config['MAIL_PASSWORD'] = 'pjrrkvdzzwmekird'
 mail = Mail(app)
 
 def send_appointment_email(recipient_email, appointment_id, appointment_date):
@@ -864,6 +864,7 @@ if __name__ == "__main__":
 
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
